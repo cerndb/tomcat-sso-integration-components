@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ch.cern.sso</groupId>
+        <artifactId>tomcat-sso-integration-components</artifactId>
+        <version>2.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>cern-tomcat-authentication-kit</artifactId>
+    <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <artifactId>cern-tomcat-session-utils</artifactId>
+            <groupId>ch.cern.sso</groupId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-saml-tomcat-adapter-core</artifactId>
+            <version>6.0.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.tomcat</groupId>
+                    <artifactId>catalina</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+    <name>cern-tomcat-authentication-kit</name>
+</project>
