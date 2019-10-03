@@ -4,7 +4,7 @@
     <parent>
         <groupId>ch.cern.sso.sp</groupId>
         <artifactId>tomcat-sso-integration-components</artifactId>
-        <version>true</version>
+        <version>2.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>cern-tomcat-authentication-kit</artifactId>
@@ -13,7 +13,7 @@
         <dependency>
             <artifactId>cern-tomcat-session-utils</artifactId>
             <groupId>ch.cern.sso.sp</groupId>
-            <version>true</version>
+            <version>2.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
