@@ -43,4 +43,4 @@ release-package-build:
     - mvn -version
     - ls -alrt
     - echo $UPDATED_MAVEN_SETTINGS_LOCATION
-    - mvn clean compile test package versions:set -DremoveSnapshot deploy -s ${UPDATED_MAVEN_SETTINGS_LOCATION} -P release-build-profile -q
+    - mvn clean compile test package versions:set deploy -s ${UPDATED_MAVEN_SETTINGS_LOCATION} -P release-build-profile
