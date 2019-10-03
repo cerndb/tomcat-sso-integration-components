@@ -52,6 +52,9 @@ public class SsoHeadersValve extends ValveBase {
                 case Constants.SSO_REMOTE_USER:
                     result.put(Constants.SSO_REMOTE_USER, request.getUserPrincipal().getName());
                     break;
+                case Constants.REMOTE_USER:
+                    result.put(Constants.REMOTE_USER, request.getUserPrincipal().getName());
+                    break;
                 case Constants.SSO_REMOTE_HOST:
                     result.put(Constants.SSO_REMOTE_HOST, request.getRemoteAddr());
                     break;

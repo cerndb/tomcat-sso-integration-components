@@ -11,9 +11,9 @@
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <keycloak.version>6.0.1</keycloak.version>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <keycloak.version>7.0.0</keycloak.version>
         <package.version.number>2.0.0</package.version.number>
         <postfix.combined.version.number>${package.version.number}${version.number.postfix}</postfix.combined.version.number>   
     </properties>
@@ -22,34 +22,29 @@
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-saml-adapter-core</artifactId>
             <version>${keycloak.version}</version>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-saml-adapter-api-public</artifactId>
             <version>${keycloak.version}</version>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-servlet-adapter-spi</artifactId>
             <version>${keycloak.version}</version>
             <scope>provided</scope>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-saml-tomcat-adapter-core</artifactId>
             <version>${keycloak.version}</version>
             <scope>provided</scope>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-saml-tomcat8-adapter</artifactId>
+            <artifactId>keycloak-saml-tomcat-adapter</artifactId>
             <version>${keycloak.version}</version>
             <scope>provided</scope>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>
@@ -58,4 +53,16 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+    <distributionManagement>
+        <repository>
+            <id>cern-jeedy-applications</id>
+            <name>Releases</name>
+            <url>${repository.target.release.URL}</url>
+        </repository>
+        <snapshotRepository>
+            <id>cern-jeedy-applications</id>
+            <name>Snapshots</name>
+            <url>${repository.target.snapshot.URL}</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

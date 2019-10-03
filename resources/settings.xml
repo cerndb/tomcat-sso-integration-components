@@ -1,0 +1,51 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">     
+    <servers>         
+        <server>             
+            <id>cern-jeedy-applications</id>             
+            <username>$MAVEN_REPO_AUTH_USER</username>             
+            <password>$MAVEN_REPO_AUTH_PW</password>         
+        </server>         
+        <server>             
+            <id>maven-central-cern-mirror</id>             
+            <username>$MAVEN_REPO_AUTH_USER</username>             
+            <password>$MAVEN_REPO_AUTH_PW</password>         
+        </server>     
+    </servers>     <!-- TODO This needs to be enabled in case you want to use proxy repository-->     <!--<mirrors>         <mirror>             <id>maven-central-cern-mirror</id>             <name>Maven central CERN mirror</name>             <url>${MAVEN_CENTRAL_CERN_MIRROR_URL}</url>             <mirrorOf>central</mirrorOf>         </mirror>     </mirrors>   -->     
+    <profiles>         
+        <profile>             
+            <id>jeedy-applications-profile</id>             
+            <repositories>                 
+                <repository>                     
+                    <id>cern-jeedy-applications</id>                     
+                    <url>${IT_DB_NEXUS_COMBINED_REPO_URL}</url>                 
+                </repository>                 <!-- TODO This needs to be enabled in case you want to use proxy repository-->                 <!--<repository>                     <id>maven-central-cern-mirror</id>                     <url>${MAVEN_CENTRAL_CERN_MIRROR_URL}</url>                 </repository>-->             
+            </repositories>         
+        </profile>         
+        <profile>             
+            <id>release-build-profile</id>             
+            <properties>                 
+                <version.number.postfix></version.number.postfix>             
+            </properties>         
+        </profile>         
+        <profile>             
+            <id>snapshot-build-profile</id>             
+            <properties>                 
+                <version.number.postfix>-SNAPSHOT</version.number.postfix>             
+            </properties>         
+        </profile>                        
+        <profile>             
+            <id>default-profile</id>             
+            <properties>                 
+                <repository.target.release.URL>${IT_DB_NEXUS_RELEASE_REPO_URL}</repository.target.release.URL>                 
+                <repository.target.snapshot.URL>${IT_DB_NEXUS_SNAPSHOT_REPO_URL}</repository.target.snapshot.URL>             
+            </properties>             
+            <activation>                 
+                <activeByDefault>true</activeByDefault>             
+            </activation>         
+        </profile>     
+    </profiles>     
+    <activeProfiles>         
+        <activeProfile>jeedy-applications-profile</activeProfile>     
+    </activeProfiles> 
+</settings>
+
