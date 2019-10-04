@@ -69,11 +69,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.7</version>
-                <configuration>
-                    <removeSnapshot>true</removeSnapshot>
-                    <allowSnapshots>false</allowSnapshots>
-                    <newVersion></newVersion>              
-                </configuration>
             </plugin>
         </plugins>
     </build>
