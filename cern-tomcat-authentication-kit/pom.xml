@@ -13,7 +13,7 @@
         <dependency>
             <artifactId>cern-tomcat-session-utils</artifactId>
             <groupId>ch.cern.sso.sp</groupId>
-            <version>2.0.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>

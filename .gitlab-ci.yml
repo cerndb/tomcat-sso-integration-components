@@ -28,7 +28,7 @@ snapshot-package-build:
   image: ${MAVEN_BUILD_IMAGE}
   stage: mavenbuild
   script:  
-    - mvn clean compile test package deploy -s ${UPDATED_MAVEN_SETTINGS_LOCATION} -P snapshot-build-profile -q
+    - mvn clean compile test package deploy -s ${UPDATED_MAVEN_SETTINGS_LOCATION} -P snapshot-build-profile
 
 # release build will be triggered only if there are master branch changes
 # releases are unique, can not be overridden
@@ -43,4 +43,4 @@ release-package-build:
     - mvn -version
     - ls -alrt
     - echo $UPDATED_MAVEN_SETTINGS_LOCATION
-    - mvn clean compile test package versions:set deploy -s ${UPDATED_MAVEN_SETTINGS_LOCATION} -P release-build-profile
+    - mvn clean compile test package versions:set versions:use-releases deploy -s ${UPDATED_MAVEN_SETTINGS_LOCATION} -P release-build-profile
