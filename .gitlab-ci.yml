@@ -40,4 +40,4 @@ release-package-build:
   image: ${MAVEN_BUILD_IMAGE}
   stage: mavenbuild
   script:
-    - mvn clean compile test package -s ${UPDATED_MAVEN_SETTINGS_LOCATION} -P release-build-profile
+    - mvn clean compile test package deploy -s ${UPDATED_MAVEN_SETTINGS_LOCATION} -P release-build-profile
