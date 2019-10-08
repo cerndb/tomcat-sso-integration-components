@@ -3,3 +3,5 @@
 target/
 *.swp
 *.versionsBackup
+test-suite/tomcat.8082/
+**/*.log

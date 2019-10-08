@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>Sample "Hello, World" Application</title>
+        <!--<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script>
+            $(document).on("click", "#somebutton", function () { // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+                $.get("http://localhost:8082/web-module-4/saml-session-info", function (responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
+                    $("#somediv").text(responseText);           // Locate HTML DOM element with ID "somediv" and set its text content with the response text.
+                });
+            });
+        </script>-->
+        <script type="text/javascript">
+            function crossContextRequest() {
+                var xmlhttp = new XMLHttpRequest();
+
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
+                        if (xmlhttp.status == 200) {
+                            document.getElementById("somediv").innerHTML = xmlhttp.responseText;
+                        } else if (xmlhttp.status == 400) {
+                            alert('There was an error 400');
+                        } else {
+                            alert('something else other than 200 was returned');
+                        }
+                    }
+                };
+
+                xmlhttp.open("GET", "http://localhost:8082/web-module-4/saml-session-info", true);
+                xmlhttp.send();
+            }
+        </script>
+    </head>
+    <body bgcolor=white>
+        <table border="0" id="table1">
+            <tr>
+                <td>
+                    <img src="http://localhost:8082/web-module-4/images/tomcat.gif">
+                </td>
+                <td>
+                    <h1>Sample "Hello, World" Application</h1>
+                    <p>This is the home page for a sample application used to illustrate the
+                        source directory organization of a web application utilizing the principles
+                        outlined in the Application Developer's Guide.
+                </td>
+            </tr>
+        </table>
+        <button id="somebutton" onclick="crossContextRequest();">Request to different context</button>
+        <div id="somediv">After click logged username will be displayed here</div>
+    </body>
+</html>

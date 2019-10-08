@@ -1,0 +1,575 @@
+{
+  "id": "demo",
+  "realm": "demo",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": true,
+  "resetPasswordAllowed": true,
+  "privateKey": "MIICXAIBAAKBgQCrVrCuTtArbgaZzL1hvh0xtL5mc7o0NqPVnYXkLvgcwiC3BjLGw1tGEGoJaXDuSaRllobm53JBhjx33UNv+5z/UMG4kytBWxheNVKnL6GgqlNabMaFfPLPCF8kAgKnsi79NMo+n6KnSY8YeUmec/p2vjO2NjsSAVcWEQMVhJ31LwIDAQABAoGAfmO8gVhyBxdqlxmIuglbz8bcjQbhXJLR2EoS8ngTXmN1bo2L90M0mUKSdc7qF10LgETBzqL8jYlQIbt+e6TH8fcEpKCjUlyq0Mf/vVbfZSNaVycY13nTzo27iPyWQHK5NLuJzn1xvxxrUeXI6A2WFpGEBLbHjwpx5WQG9A+2scECQQDvdn9NE75HPTVPxBqsEd2z10TKkl9CZxu10Qby3iQQmWLEJ9LNmy3acvKrE3gMiYNWb6xHPKiIqOR1as7L24aTAkEAtyvQOlCvr5kAjVqrEKXalj0Tzewjweuxc0pskvArTI2Oo070h65GpoIKLc9jf+UA69cRtquwP93aZKtW06U8dQJAF2Y44ks/mK5+eyDqik3koCI08qaC8HYq2wVl7G2QkJ6sbAaILtcvD92ToOvyGyeE0flvmDZxMYlvaZnaQ0lcSQJBAKZU6umJi3/xeEbkJqMfeLclD27XGEFoPeNrmdx0q10Azp4NfJAY+Z8KRyQCR2BEG+oNitBOZ+YXF9KCpH3cdmECQHEigJhYg+ykOvr1aiZUMFT72HU0jnmQe2FVekuG+LJUt2Tm7GtMjTFoGpf0JwrVuZN39fOYAlo+nTixgeW7X8Y=",
+  "publicKey": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCrVrCuTtArbgaZzL1hvh0xtL5mc7o0NqPVnYXkLvgcwiC3BjLGw1tGEGoJaXDuSaRllobm53JBhjx33UNv+5z/UMG4kytBWxheNVKnL6GgqlNabMaFfPLPCF8kAgKnsi79NMo+n6KnSY8YeUmec/p2vjO2NjsSAVcWEQMVhJ31LwIDAQAB",
+  "requiredCredentials": [
+    "password"
+  ],
+  "passwordPolicy": "hashIterations(1)",
+  "defaultRoles": [
+    "user"
+  ],
+  "smtpServer": {
+    "from": "auto@keycloak.org",
+    "host": "localhost",
+    "port": "3025"
+  },
+  "eventsEnabled": true,
+  "eventsListeners": [
+    "jboss-logging"
+  ],
+  "enabledEventTypes": [],
+  "users": [
+    {
+      "username": "lurodrigX",
+      "enabled": true,
+      "email": "lurodrigx@cern.ch",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password"
+        }
+      ],
+      "attributes": {
+        "http://schemas.xmlsoap.org/claims/Building": "31 3-024",
+        "http://schemas.xmlsoap.org/claims/PhoneNumber": "+4122767354",
+        "http://schemas.xmlsoap.org/claims/Federation": "CERN",
+        "http://schemas.xmlsoap.org/claims/uidNumber": "14825",
+        "http://schemas.xmlsoap.org/claims/EmailAddress": "luis.rodriguez.fernandez@cern.ch",
+        "http://schemas.xmlsoap.org/claims/CommonName": "lurodrig",
+        "http://schemas.xmlsoap.org/claims/Lastname": "Rodriguez Fernandez",
+        "http://schemas.xmlsoap.org/claims/IdentityClass": "CERN Registered",
+        "http://schemas.xmlsoap.org/claims/PersonID": "720335",
+        "http://schemas.xmlsoap.org/claims/Department": "IT/DB",
+        "http://schemas.xmlsoap.org/claims/UPN": "luis.rodriguez.fernandez@cern.ch",
+        "http://schemas.xmlsoap.org/claims/gidNumber": "2763",
+        "http://schemas.xmlsoap.org/claims/FirstName": "Luis",
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "CERN Users",
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn": "luis.rodriguez.fernandez@cern.ch",
+        "http://schemas.xmlsoap.org/claims/MobileNumber": "+41754110558",
+        "http://schemas.xmlsoap.org/claims/PreferredLanguage": "FR",
+        "http://schemas.xmlsoap.org/claims/AuthLevel": "Normal",
+        "http://schemas.xmlsoap.org/claims/HomeInstitute": "CERN"
+      },
+      "groups": [
+          "it-dep-db-dar",
+          "dbondemand-users",
+          "sc-dep-dist-reports",
+          "oracle-em-ais-mw-users"
+      ]
+    },
+        {
+      "username": "evilloginas",
+      "enabled": true,
+      "email": "evilloginas@cern.ch",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password"
+        }
+      ],
+      "attributes": {
+        "http://schemas.xmlsoap.org/claims/Building": "31 3-024",
+        "http://schemas.xmlsoap.org/claims/PhoneNumber": "+4122767354",
+        "http://schemas.xmlsoap.org/claims/Federation": "CERN",
+        "http://schemas.xmlsoap.org/claims/uidNumber": "14825",
+        "http://schemas.xmlsoap.org/claims/EmailAddress": "evil.login.as@cern.ch",
+        "http://schemas.xmlsoap.org/claims/CommonName": "Evil",
+        "http://schemas.xmlsoap.org/claims/Lastname": "Login As",
+        "http://schemas.xmlsoap.org/claims/IdentityClass": "CERN Registered",
+        "http://schemas.xmlsoap.org/claims/PersonID": "720335",
+        "http://schemas.xmlsoap.org/claims/Department": "IT/DB",
+        "http://schemas.xmlsoap.org/claims/UPN": "evil.login.as@cern.ch",
+        "http://schemas.xmlsoap.org/claims/gidNumber": "2763",
+        "http://schemas.xmlsoap.org/claims/FirstName": "Evil",
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "CERN Users",
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn": "evil.login.as@cern.ch",
+        "http://schemas.xmlsoap.org/claims/MobileNumber": "+41754110558",
+        "http://schemas.xmlsoap.org/claims/PreferredLanguage": "FR",
+        "http://schemas.xmlsoap.org/claims/AuthLevel": "Normal",
+        "http://schemas.xmlsoap.org/claims/HomeInstitute": "CERN"
+      },
+      "groups": [
+          "it-dep-db-ias",
+          "dbondemand-users",
+          "sc-dep-dist-reports",
+          "oracle-em-ais-mw-users"
+      ]
+    },
+    {
+      "username": "bburke",
+      "enabled": true,
+      "email": "bburke@redhat.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password"
+        }
+      ],
+      "attributes": {
+        "http://schemas.xmlsoap.org/claims/Building": "31 3-024",
+        "http://schemas.xmlsoap.org/claims/PhoneNumber": "+4122767354",
+        "http://schemas.xmlsoap.org/claims/Federation": "CERN",
+        "http://schemas.xmlsoap.org/claims/uidNumber": "14825",
+        "http://schemas.xmlsoap.org/claims/EmailAddress": "bastian.burke@cern.ch",
+        "http://schemas.xmlsoap.org/claims/CommonName": "bburke",
+        "http://schemas.xmlsoap.org/claims/Lastname": "Burke",
+        "http://schemas.xmlsoap.org/claims/IdentityClass": "CERN Registered",
+        "http://schemas.xmlsoap.org/claims/PersonID": "666666",
+        "http://schemas.xmlsoap.org/claims/Department": "IT/DB",
+        "http://schemas.xmlsoap.org/claims/UPN": "bastian.burke@cern.ch",
+        "http://schemas.xmlsoap.org/claims/gidNumber": "1234",
+        "http://schemas.xmlsoap.org/claims/FirstName": "Bastian",
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "CERN Users",
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn": "bastian.burke@cern.ch",
+        "http://schemas.xmlsoap.org/claims/MobileNumber": "+41754115555",
+        "http://schemas.xmlsoap.org/claims/PreferredLanguage": "EN",
+        "http://schemas.xmlsoap.org/claims/AuthLevel": "Normal",
+        "http://schemas.xmlsoap.org/claims/HomeInstitute": "CERN"
+      },
+      "groups": [
+          "it-dep-db-mgmt",
+          "club-dancing",
+          "club-boxing",
+          "directorate"
+      ]
+    },
+    {
+      "username": "bgates",
+      "enabled": true,
+      "email": "billgates@hotmail.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password"
+        }
+      ],
+      "attributes": {
+        "http://schemas.xmlsoap.org/claims/Building": "31 3-024",
+        "http://schemas.xmlsoap.org/claims/PhoneNumber": "+4122767354",
+        "http://schemas.xmlsoap.org/claims/Federation": "CERN",
+        "http://schemas.xmlsoap.org/claims/uidNumber": "14825",
+        "http://schemas.xmlsoap.org/claims/EmailAddress": "bastian.burke@cern.ch",
+        "http://schemas.xmlsoap.org/claims/CommonName": "bburke",
+        "http://schemas.xmlsoap.org/claims/Lastname": "Burke",
+        "http://schemas.xmlsoap.org/claims/IdentityClass": "CERN Registered",
+        "http://schemas.xmlsoap.org/claims/PersonID": "666666",
+        "http://schemas.xmlsoap.org/claims/Department": "IT/DB",
+        "http://schemas.xmlsoap.org/claims/UPN": "bastian.burke@cern.ch",
+        "http://schemas.xmlsoap.org/claims/gidNumber": "1234",
+        "http://schemas.xmlsoap.org/claims/FirstName": "Bastian",
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "CERN Users",
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn": "bastian.burke@cern.ch",
+        "http://schemas.xmlsoap.org/claims/MobileNumber": "+41754115555",
+        "http://schemas.xmlsoap.org/claims/PreferredLanguage": "EN",
+        "http://schemas.xmlsoap.org/claims/AuthLevel": "Normal",
+        "http://schemas.xmlsoap.org/claims/HomeInstitute": "CERN"
+      },
+      "groups": [
+          "it-dep-db-dar",
+          "dbondemand-users",
+          "sc-dep-dist-reports",
+          "oracle-em-ais-mw-users",
+          "CERN External Users"
+      ]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "http://localhost:8082/web-module-1/",
+      "name": "http://localhost:8082/web-module-1/",
+      "enabled": true,
+      "protocol": "saml",
+      "fullScopeAllowed": true,
+      "baseUrl": "http://localhost:8082/web-module-1",
+      "redirectUris": [
+        "http://localhost:8082/web-module-1/*"
+      ],
+      "attributes": {
+        "saml_assertion_consumer_url_post": "http://localhost:8082/web-module-1/saml",
+        "saml_assertion_consumer_url_redirect": "http://localhost:8082/web-module-1/saml",
+        "saml_single_logout_service_url_post": "http://localhost:8082/web-module-1/saml2slo/saml",
+        "saml_single_logout_service_url_redirect": "http://localhost:8082/web-module-1/saml2slo/saml",
+        "saml.server.signature": "true",
+        "saml.signature.algorithm": "RSA_SHA256",
+        "saml.client.signature": "true",
+        "saml.authnstatement": "true",
+        "saml.signing.certificate": "MIIB1DCCAT0CBgFJGP5dZDANBgkqhkiG9w0BAQsFADAwMS4wLAYDVQQDEyVodHRwOi8vbG9jYWxob3N0OjgwODAvc2FsZXMtcG9zdC1zaWcvMB4XDTE0MTAxNjEyNDQyM1oXDTI0MTAxNjEyNDYwM1owMDEuMCwGA1UEAxMlaHR0cDovL2xvY2FsaG9zdDo4MDgwL3NhbGVzLXBvc3Qtc2lnLzCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA1RvGu8RjemSJA23nnMksoHA37MqY1DDTxOECY4rPAd9egr7GUNIXE0y1MokaR5R2crNpN8RIRwR8phQtQDjXL82c6W+NLQISxztarQJ7rdNJIYwHY0d5ri1XRpDP8zAuxubPYiMAVYcDkIcvlbBpwh/dRM5I2eElRK+eSiaMkCUCAwEAATANBgkqhkiG9w0BAQsFAAOBgQCLms6htnPaY69k1ntm9a5jgwSn/K61cdai8R8B0ccY7zvinn9AfRD7fiROQpFyY29wKn8WCLrJ86NBXfgFUGyR5nLNHVy3FghE36N2oHy53uichieMxffE6vhkKJ4P8ChfJMMOZlmCPsQPDvjoAghHt4mriFiQgRdPgIy/zDjSNw=="
+      },
+      "protocolMappers": [
+        {
+          "name": "HrIdMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "http://schemas.xmlsoap.org/claims/PersonID",
+            "friendly.name": "PersonID",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/PersonID",
+            "attribute.nameformat": "Unspecified"
+          }
+        },
+        {
+          "name": "PreferredLanguageMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "http://schemas.xmlsoap.org/claims/PreferredLanguage",
+            "friendly.name": "PreferredLanguage",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/PreferredLanguage",
+            "attribute.nameformat": "Unspecified"
+          }
+        },
+        {
+          "name": "IdentityClassMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "attribute.nameformat": "Unspecified",
+            "user.attribute": "http://schemas.xmlsoap.org/claims/IdentityClass",
+            "friendly.name": "IdentityClass",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/IdentityClass"
+          }
+        },
+        {
+          "name": "GroupMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-group-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "single": "true",
+            "attribute.nameformat": "Unspecified",
+            "full.path": "false",
+            "friendly.name": "Groups",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/Group"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "http://localhost:8082/web-module-3/",
+      "name": "http://localhost:8082/web-module-3/",
+      "enabled": true,
+      "protocol": "saml",
+      "fullScopeAllowed": true,
+      "baseUrl": "http://localhost:8082/web-module-3",
+      "redirectUris": [
+        "http://localhost:8082/web-module-3/*"
+      ],
+      "attributes": {
+        "saml_assertion_consumer_url_post": "http://localhost:8082/web-module-3/saml",
+        "saml_assertion_consumer_url_redirect": "http://localhost:8082/web-module-3/saml",
+        "saml_single_logout_service_url_post": "http://localhost:8082/web-module-3/saml2slo/saml",
+        "saml_single_logout_service_url_redirect": "http://localhost:8082/web-module-3/saml2slo/saml",
+        "saml.server.signature": "true",
+        "saml.signature.algorithm": "RSA_SHA256",
+        "saml.client.signature": "true",
+        "saml.authnstatement": "true",
+        "saml.signing.certificate": "MIIB1DCCAT0CBgFJGP5dZDANBgkqhkiG9w0BAQsFADAwMS4wLAYDVQQDEyVodHRwOi8vbG9jYWxob3N0OjgwODAvc2FsZXMtcG9zdC1zaWcvMB4XDTE0MTAxNjEyNDQyM1oXDTI0MTAxNjEyNDYwM1owMDEuMCwGA1UEAxMlaHR0cDovL2xvY2FsaG9zdDo4MDgwL3NhbGVzLXBvc3Qtc2lnLzCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA1RvGu8RjemSJA23nnMksoHA37MqY1DDTxOECY4rPAd9egr7GUNIXE0y1MokaR5R2crNpN8RIRwR8phQtQDjXL82c6W+NLQISxztarQJ7rdNJIYwHY0d5ri1XRpDP8zAuxubPYiMAVYcDkIcvlbBpwh/dRM5I2eElRK+eSiaMkCUCAwEAATANBgkqhkiG9w0BAQsFAAOBgQCLms6htnPaY69k1ntm9a5jgwSn/K61cdai8R8B0ccY7zvinn9AfRD7fiROQpFyY29wKn8WCLrJ86NBXfgFUGyR5nLNHVy3FghE36N2oHy53uichieMxffE6vhkKJ4P8ChfJMMOZlmCPsQPDvjoAghHt4mriFiQgRdPgIy/zDjSNw=="
+      },
+      "protocolMappers": [
+        {
+          "name": "HrIdMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "http://schemas.xmlsoap.org/claims/PersonID",
+            "friendly.name": "PersonID",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/PersonID",
+            "attribute.nameformat": "Unspecified"
+          }
+        },
+        {
+          "name": "PreferredLanguageMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "http://schemas.xmlsoap.org/claims/PreferredLanguage",
+            "friendly.name": "PreferredLanguage",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/PreferredLanguage",
+            "attribute.nameformat": "Unspecified"
+          }
+        },
+        {
+          "name": "IdentityClassMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "attribute.nameformat": "Unspecified",
+            "user.attribute": "http://schemas.xmlsoap.org/claims/IdentityClass",
+            "friendly.name": "IdentityClass",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/IdentityClass"
+          }
+        },
+        {
+          "name": "GroupMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-group-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "single": "true",
+            "attribute.nameformat": "Unspecified",
+            "full.path": "false",
+            "friendly.name": "Groups",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/Group"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "http://localhost:8082/web-module-4/",
+      "name": "http://localhost:8082/web-module-4/",
+      "enabled": true,
+      "protocol": "saml",
+      "fullScopeAllowed": true,
+      "baseUrl": "http://localhost:8082/web-module-4",
+      "redirectUris": [
+        "http://localhost:8082/web-module-4/*"
+      ],
+      "attributes": {
+        "saml_assertion_consumer_url_post": "http://localhost:8082/web-module-4/saml",
+        "saml_assertion_consumer_url_redirect": "http://localhost:8082/web-module-4/saml",
+        "saml_single_logout_service_url_post": "http://localhost:8082/web-module-4/saml2slo/saml",
+        "saml_single_logout_service_url_redirect": "http://localhost:8082/web-module-4/saml2slo/saml",
+        "saml.server.signature": "true",
+        "saml.signature.algorithm": "RSA_SHA256",
+        "saml.client.signature": "true",
+        "saml.authnstatement": "true",
+        "saml.signing.certificate": "MIIB1DCCAT0CBgFJGP5dZDANBgkqhkiG9w0BAQsFADAwMS4wLAYDVQQDEyVodHRwOi8vbG9jYWxob3N0OjgwODAvc2FsZXMtcG9zdC1zaWcvMB4XDTE0MTAxNjEyNDQyM1oXDTI0MTAxNjEyNDYwM1owMDEuMCwGA1UEAxMlaHR0cDovL2xvY2FsaG9zdDo4MDgwL3NhbGVzLXBvc3Qtc2lnLzCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA1RvGu8RjemSJA23nnMksoHA37MqY1DDTxOECY4rPAd9egr7GUNIXE0y1MokaR5R2crNpN8RIRwR8phQtQDjXL82c6W+NLQISxztarQJ7rdNJIYwHY0d5ri1XRpDP8zAuxubPYiMAVYcDkIcvlbBpwh/dRM5I2eElRK+eSiaMkCUCAwEAATANBgkqhkiG9w0BAQsFAAOBgQCLms6htnPaY69k1ntm9a5jgwSn/K61cdai8R8B0ccY7zvinn9AfRD7fiROQpFyY29wKn8WCLrJ86NBXfgFUGyR5nLNHVy3FghE36N2oHy53uichieMxffE6vhkKJ4P8ChfJMMOZlmCPsQPDvjoAghHt4mriFiQgRdPgIy/zDjSNw=="
+      },
+      "protocolMappers": [
+        {
+          "name": "HrIdMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "http://schemas.xmlsoap.org/claims/PersonID",
+            "friendly.name": "PersonID",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/PersonID",
+            "attribute.nameformat": "Unspecified"
+          }
+        },
+        {
+          "name": "PreferredLanguageMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "http://schemas.xmlsoap.org/claims/PreferredLanguage",
+            "friendly.name": "PreferredLanguage",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/PreferredLanguage",
+            "attribute.nameformat": "Unspecified"
+          }
+        },
+        {
+          "name": "IdentityClassMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "attribute.nameformat": "Unspecified",
+            "user.attribute": "http://schemas.xmlsoap.org/claims/IdentityClass",
+            "friendly.name": "IdentityClass",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/IdentityClass"
+          }
+        },
+        {
+          "name": "GroupMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-group-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "single": "true",
+            "attribute.nameformat": "Unspecified",
+            "full.path": "false",
+            "friendly.name": "Groups",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/Group"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "http://localhost:7001/sample/",
+      "name": "http://localhost:7001/sample",
+      "enabled": true,
+      "protocol": "saml",
+      "fullScopeAllowed": true,
+      "baseUrl": "http://localhost:7001/sample",
+      "redirectUris": [
+        "http://localhost:7001/sample/*"
+      ],
+      "attributes": {
+        "saml_assertion_consumer_url_post": "http://localhost:7001/saml2/sp/acs/post",
+        "saml_assertion_consumer_url_redirect": "http://localhost:7001/saml2/sp/acs/post",
+        "saml_single_logout_service_url_post": "http://localhost:7001/saml2slo/",
+        "saml_single_logout_service_url_redirect": "http://localhost:7001/saml2slo/",
+        "saml.server.signature": "true",
+        "saml.signature.algorithm": "RSA_SHA256",
+        "saml.client.signature": "true",
+        "saml.authnstatement": "true",
+        "saml.signing.certificate": "MIIEbjCCA1agAwIBAgIJAOegTpHqxv5MMA0GCSqGSIb3DQEBCwUAMHgxCzAJBgNVBAYTAlVTMRAwDgYDVQQIDAdNeVN0YXRlMQ8wDQYDVQQHDAZNeVRvd24xFzAVBgNVBAoMDk15T3JnYW5pemF0aW9uMRkwFwYDVQQLDBBGT1IgVEVTVElORyBPTkxZMRIwEAYDVQQDDAlDZXJ0R2VuQ0EwHhcNMTkwMzA2MTY1MjU4WhcNMzQwMzA3MTY1MjU4WjCBgDELMAkGA1UEBhMCVVMxEDAOBgNVBAgMB015U3RhdGUxDzANBgNVBAcMBk15VG93bjEXMBUGA1UECgwOTXlPcmdhbml6YXRpb24xGTAXBgNVBAsMEEZPUiBURVNUSU5HIE9OTFkxGjAYBgNVBAMMEWx1cm9kcmlnLWxhdGl0dWRlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnFVdKHzVMUlQXaP4Qet2mMfUb32o11knSVt5zFTi2dmoc109nh9M9Uh0i3vyCJp30JtWIXAK0XV/aMLKljM0da2kkAl3Gwg9asCqOQHD0hH/rJ98siaE0K3Rfk9FRayaZmnV5qY4Q/B2anrWLXsSXDaPOijLKeIxeGK6VuetLWkOyh1s8OjinupEi8qp5098c7ih+hw46xw8oIxAlpQTnW0fdH61QaXKausjUbofroNOIAGaQbmwwORwFU1NnRrJj9HMkxoe2k2b4wde23HsKF9fVazI2EqvvfBSEK1ROzcIe4qaTMg6ROyD95n3/vV9e+nRfCFaxrcrRKf1FiQ6YwIDAQABo4HxMIHuMAkGA1UdEwQCMAAwDgYDVR0PAQH/BAQDAgP4MB0GA1UdDgQWBBRgAhBS/fySjidGm7m2msSM8gveSDCBsQYDVR0jBIGpMIGmgBQ0OP1F2IDPx9Lo3x34oTmwEYgAaqF8pHoweDELMAkGA1UEBhMCVVMxEDAOBgNVBAgMB015U3RhdGUxDzANBgNVBAcMBk15VG93bjEXMBUGA1UECgwOTXlPcmdhbml6YXRpb24xGTAXBgNVBAsMEEZPUiBURVNUSU5HIE9OTFkxEjAQBgNVBAMMCUNlcnRHZW5DQYIQQARIhsRB7ztkOoBmQJr8oDANBgkqhkiG9w0BAQsFAAOCAQEAHkYd/ZSZ9+97PEmYcAcA9ctfkbIZ6+Ugtm0oh6srAxS/qPVzQDt2Ffxx5p4VNUtae7BXqRO28o4COotb59eeJsAJH2fAinJTLDRxJZOUdenda44MvvqFoUwpw6aNjg78T8jxcsXIb1YJ6z4sK+e4L1XV9ZFU5o3h52aRjmaHm+JiQSl33wRwtTR9CuUnGGLmF56xEMgkPYu+UPjwJwB0k5ImNQS2zYNWimesEXCwKfqTmysQ7OmRln5C0i6oFFuNR5pFtypY2rI8UWV5FwhIKYUGDKHJnxdQnHCAwR9TGserUQxQjZhz2FjcxR/BxA+Tq9OG1UDehawGr3O5QyBGLw=="
+      },
+      "protocolMappers": [
+        {
+          "name": "HrIdMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "http://schemas.xmlsoap.org/claims/PersonID",
+            "friendly.name": "PersonID",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/PersonID",
+            "attribute.nameformat": "Unspecified"
+          }
+        },
+        {
+          "name": "PreferredLanguageMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "http://schemas.xmlsoap.org/claims/PreferredLanguage",
+            "friendly.name": "PreferredLanguage",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/PreferredLanguage",
+            "attribute.nameformat": "Unspecified"
+          }
+        },
+        {
+          "name": "IdentityClassMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "attribute.nameformat": "Unspecified",
+            "user.attribute": "http://schemas.xmlsoap.org/claims/IdentityClass",
+            "friendly.name": "IdentityClass",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/IdentityClass"
+          }
+        },
+        {
+          "name": "GroupMapper",
+          "protocol": "saml",
+          "protocolMapper": "saml-group-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "single": "true",
+            "attribute.nameformat": "Unspecified",
+            "full.path": "false",
+            "friendly.name": "Groups",
+            "attribute.name": "http://schemas.xmlsoap.org/claims/Group"
+          }
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "name": "dbondemand-users",
+      "path": "/dbondemand-users",
+      "attributes": {},
+      "realmRoles": [],
+      "clientRoles": {},
+      "subGroups": []
+    }, 
+    {
+      "name": "it-dep-db-dar",
+      "path": "/it-dep-db-dar",
+      "attributes": {},
+      "realmRoles": ["admin"],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "name": "it-dep-db-ias",
+      "path": "/it-dep-db-ias",
+      "attributes": {},
+      "realmRoles": [],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "name": "oracle-em-ais-mw-users",
+      "path": "/oracle-em-ais-mw-users",
+      "attributes": {},
+      "realmRoles": [],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "name": "sc-dep-dist-reports",
+      "path": "/sc-dep-dist-reports",
+      "attributes": {},
+      "realmRoles": [],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "name": "it-dep-db-mgmt",
+      "path": "/it-dep-db-mgmt",
+      "attributes": {},
+      "realmRoles": [],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "name": "club-dancing",
+      "path": "/club-dancing",
+      "attributes": {},
+      "realmRoles": [],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "name": "club-boxing",
+      "path": "/club-boxing",
+      "attributes": {},
+      "realmRoles": [],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "name": "directorate",
+      "path": "/directorate",
+      "attributes": {},
+      "realmRoles": [],
+      "clientRoles": {},
+      "subGroups": []
+    }
+,
+    {
+      "name": "CERN External Users",
+      "path": "/CERN External Users",
+      "attributes": {},
+      "realmRoles": [],
+      "clientRoles": {},
+      "subGroups": []
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "manager",
+        "description": "Have Manager privileges"
+      },
+      {
+        "name": "user",
+        "description": "Have User privileges"
+      },
+      {
+        "name": "admin",
+        "description": "Administrator privileges"
+      }
+    ]
+  }
+}
