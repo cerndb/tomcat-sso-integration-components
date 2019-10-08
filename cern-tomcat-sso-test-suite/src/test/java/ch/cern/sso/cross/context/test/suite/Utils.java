@@ -37,10 +37,12 @@ public class Utils {
         String[] cookieValuePair = pageSource.split("\n");
         for (String cookie : cookies) {
             // Check that the name of the cookie is display
-            Optional<String> cookieNameAndValue = Arrays.stream(cookieValuePair).filter(cvp -> cvp.contains(cookie)).findFirst();
-            Assert.assertTrue("Cookie " + cookie + " has not been created.",cookieNameAndValue.isPresent());
+            // Optional<String> cookieNameAndValue = Arrays.stream(cookieValuePair).filter(cvp -> cvp.contains(cookie)).findFirst();
+            // TODO: avoid java 8 or upper features, sigh...
+            String cookieNameAndValue = new String();
+            Assert.assertTrue("Cookie " + cookie + " has not been created.",cookieNameAndValue.isEmpty());
             // Check the value is not empty
-            String value = cookieNameAndValue.get().split("-->")[1];
+            String value = cookieNameAndValue.split("-->")[1];
             Assert.assertTrue("Cookie " + cookie + " value is empty", !value.isEmpty()); 
         }
     }
