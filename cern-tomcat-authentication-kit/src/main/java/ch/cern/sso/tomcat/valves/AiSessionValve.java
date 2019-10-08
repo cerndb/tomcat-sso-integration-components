@@ -59,22 +59,24 @@ public class AiSessionValve extends ValveBase {
     public void invoke(Request request, Response response) throws IOException, ServletException {
         try {
             initValveParameters(request);
-            PrincipalWrapper principalWrapper = new PrincipalWrapper(request.getUserPrincipal());
-            String[] aiCookieNames = {Constants.AI_SESSION};
-            // Be sure AI_SESSION cookies are not injected from the client
-            this.cookiesInspector.preventSpoofing(request.getCookies(), aiCookieNames, principalWrapper);
-            // Get the loginAsCookie and check if the user has rights to inject it in the request
-            Cookie loginAsCookie = this.loginAsCookieFactory.getLoginAsCookie(request.getCookies(), Constants.AI_LOGIN_AS, isLoginAsEnabled);
-            authorizer.autorizeLoginAs(this.groupsAllowed, loginAsCookie, principalWrapper, response, this.isLoginAsEnabled);
-            Cookie ai_session = createAiSessionCookie(request, principalWrapper, loginAsCookie);
-            // Inject ai_session in every request
-            request.addCookie(ai_session);
+            if (request.getUserPrincipal() != null) {
+                PrincipalWrapper principalWrapper = new PrincipalWrapper(request.getUserPrincipal());
+                String[] aiCookieNames = {Constants.AI_SESSION};
+                // Be sure AI_SESSION cookies are not injected from the client
+                this.cookiesInspector.preventSpoofing(request.getCookies(), aiCookieNames, principalWrapper);
+                // Get the loginAsCookie and check if the user has rights to inject it in the request
+                Cookie loginAsCookie = this.loginAsCookieFactory.getLoginAsCookie(request.getCookies(), Constants.AI_LOGIN_AS, isLoginAsEnabled);
+                authorizer.autorizeLoginAs(this.groupsAllowed, loginAsCookie, principalWrapper, response, this.isLoginAsEnabled);
+                Cookie ai_session = createAiSessionCookie(request, principalWrapper, loginAsCookie);
+                // Inject ai_session in every request
+                request.addCookie(ai_session);
+            }
             this.getNext().invoke(request, response);
         } catch (WrongAiLoginAsCookieFormatException
                 | UnknownHostException
                 | InstantiationException
-                | NumberFormatException 
-                | HeaderInjectionException 
+                | NumberFormatException
+                | HeaderInjectionException
                 | RemoteException ex) {
             Logger.getLogger(AiSessionValve.class.getName()).log(Level.SEVERE, null, ex);
             response.sendError(HttpServletResponse.SC_FORBIDDEN, ex.getMessage());
@@ -83,8 +85,8 @@ public class AiSessionValve extends ValveBase {
 
     private void initValveParameters(Request request) throws ServletException {
         ServletContext servletContext = request.getServletContext();
-        this.isLoginAsEnabled = Boolean.parseBoolean(initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.STATUS_LOGIN_AS), Constants.STATUS_LOGIN_AS, false, Level.WARNING, MessagesKeys.NO_AI_LOGIN_AS_CONFIGURED));
-        this.groupsAllowed = initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.GROUPS_LOGIN_AS), Constants.GROUPS_LOGIN_AS, ",", false, Level.WARNING, MessagesKeys.NO_GROUPS_LOGIN_AS_CONFIGURED);
+        this.isLoginAsEnabled = Boolean.parseBoolean(initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.STATUS_LOGIN_AS), Constants.STATUS_LOGIN_AS, false, Level.FINEST, MessagesKeys.NO_AI_LOGIN_AS_CONFIGURED));
+        this.groupsAllowed = initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.GROUPS_LOGIN_AS), Constants.GROUPS_LOGIN_AS, ",", false, Level.FINEST, MessagesKeys.NO_GROUPS_LOGIN_AS_CONFIGURED);
     }
 
     private Cookie createAiSessionCookie(Request request, PrincipalWrapper principalWrapper, Cookie loginAsCookie) throws UnknownHostException, InstantiationException, NumberFormatException {

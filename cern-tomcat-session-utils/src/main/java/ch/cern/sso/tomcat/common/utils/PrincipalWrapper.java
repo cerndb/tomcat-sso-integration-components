@@ -30,21 +30,29 @@ public class PrincipalWrapper implements Serializable {
     }
 
     public PrincipalWrapper(Principal principal) {
-        String hrId = new String();
-        String preferredLanguage = new String();
+        String hrId = new String("0");
+        String preferredLanguage = new String("EN");
         String identityClass = new String();
         List<String> roles = new ArrayList<>();
         if (principal instanceof SamlPrincipal) {
             hrId = ((SamlPrincipal) principal).getAttribute(SsoClaims.SSO_CLAIM_HR_ID);
-            preferredLanguage = ((SamlPrincipal) principal).getAttribute(SsoClaims.SSO_CLAIM_PREFERRED_LANGUAGE);
-            identityClass = String.valueOf(((SamlPrincipal) principal).getAttribute(SsoClaims.SSO_CLAIM_PREFERRED_LANGUAGE).charAt(0));
+            identityClass = ((SamlPrincipal) principal).getAttribute(SsoClaims.SSO_CLAIM_IDENTITY_CLASS);
+            if (((SamlPrincipal) principal).getAttribute(SsoClaims.SSO_CLAIM_PREFERRED_LANGUAGE) != null) {
+                preferredLanguage = String.valueOf(((SamlPrincipal) principal).getAttribute(SsoClaims.SSO_CLAIM_PREFERRED_LANGUAGE).charAt(0));
+            }
             roles = ((SamlPrincipal) principal).getAttributes(Constants.ROLES);
         } else if (principal instanceof GenericPrincipal) {
-            SamlPrincipal userPrincipal = (SamlPrincipal) ((GenericPrincipal) principal).getUserPrincipal();
-            hrId = userPrincipal.getAttribute(SsoClaims.SSO_CLAIM_HR_ID);
-            preferredLanguage = userPrincipal.getAttribute(SsoClaims.SSO_CLAIM_PREFERRED_LANGUAGE);
-            identityClass = String.valueOf(userPrincipal.getAttribute(SsoClaims.SSO_CLAIM_PREFERRED_LANGUAGE).charAt(0));
-            roles = userPrincipal.getAttributes(Constants.ROLES);
+            // This covers the case of accesing from non SSO protected context: for instance /Catalog
+            GenericPrincipal p = (GenericPrincipal) principal;
+            if (p.getUserPrincipal() instanceof SamlPrincipal) {
+                SamlPrincipal userPrincipal = (SamlPrincipal) ((GenericPrincipal) principal).getUserPrincipal();
+                hrId = userPrincipal.getAttribute(SsoClaims.SSO_CLAIM_HR_ID);
+                identityClass = userPrincipal.getAttribute(SsoClaims.SSO_CLAIM_IDENTITY_CLASS);
+                if (userPrincipal.getAttribute(SsoClaims.SSO_CLAIM_PREFERRED_LANGUAGE) != null) {
+                    preferredLanguage = String.valueOf(userPrincipal.getAttribute(SsoClaims.SSO_CLAIM_PREFERRED_LANGUAGE).charAt(0));
+                }
+                roles = userPrincipal.getAttributes(Constants.ROLES);
+            }
         }
         this.setName(principal.getName());
         this.setHrId(hrId);

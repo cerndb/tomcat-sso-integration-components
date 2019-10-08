@@ -108,7 +108,7 @@ public class AisCookieFactory {
             // AI_LOGIN_AS=userName(Required):hrId(optional):aiLang(optional)
             value = this.getValueFromLoginAsCookie(Constants.AI_LANG, loginAsCookie).charAt(0);
         } else {
-            if (principalWrapper.getPreferredLanguage() != null) {
+            if (principalWrapper.getPreferredLanguage() != null && !principalWrapper.getPreferredLanguage().isEmpty()) {
                 value = principalWrapper.getPreferredLanguage().charAt(0);
             }
         }

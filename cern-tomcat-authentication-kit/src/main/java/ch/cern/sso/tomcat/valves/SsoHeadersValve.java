@@ -34,15 +34,17 @@ public class SsoHeadersValve extends ValveBase {
     @Override
     public void invoke(Request request, Response response) throws IOException, ServletException {
         initValveParameters(request);
-        Map<String, String> headersToInject = createHeaders(request);
-        this.ssoRemoteHeadersWrapper = new SsoRemoteHeadersWrapper(request.getRequest(), headersToInject);
-        request.setRequest((HttpServletRequest) this.ssoRemoteHeadersWrapper);
+        if (request.getUserPrincipal() != null) {
+            Map<String, String> headersToInject = createHeaders(request);
+            this.ssoRemoteHeadersWrapper = new SsoRemoteHeadersWrapper(request.getRequest(), headersToInject);
+            request.setRequest((HttpServletRequest) this.ssoRemoteHeadersWrapper);
+        }
         this.getNext().invoke(request, response);
     }
 
     private void initValveParameters(Request request) throws ServletException {
         ServletContext servletContext = request.getServletContext();
-        this.ssoHeadersNames = this.initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.SSO_REMOTE_HEADERS), Constants.SSO_REMOTE_HEADERS, ",", false, Level.WARNING, MessagesKeys.NO_SSO_REMOTE_HEADERS_CONFIGURED);
+        this.ssoHeadersNames = this.initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.SSO_REMOTE_HEADERS), Constants.SSO_REMOTE_HEADERS, ",", false, Level.FINEST, MessagesKeys.NO_SSO_REMOTE_HEADERS_CONFIGURED);
     }
 
     private Map<String, String> createHeaders(Request request) {

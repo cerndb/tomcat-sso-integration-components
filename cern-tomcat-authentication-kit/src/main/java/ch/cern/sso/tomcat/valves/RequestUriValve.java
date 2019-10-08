@@ -39,7 +39,7 @@ public class RequestUriValve extends ValveBase {
     
     private void initValveParameters(Request request) throws ServletException {
         ServletContext servletContext = request.getServletContext();
-        this.isUriEncoded = Boolean.parseBoolean(initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.URI_ENCODE), Constants.URI_ENCODE, false, Level.INFO, MessagesKeys.NO_URI_ENCODED_CONFIGURED));
+        this.isUriEncoded = Boolean.parseBoolean(initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.URI_ENCODE), Constants.URI_ENCODE, false, Level.FINEST, MessagesKeys.NO_URI_ENCODED_CONFIGURED));
     }
     
 }

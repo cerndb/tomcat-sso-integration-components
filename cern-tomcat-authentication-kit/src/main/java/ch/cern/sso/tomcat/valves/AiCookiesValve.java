@@ -55,14 +55,16 @@ public class AiCookiesValve extends ValveBase {
     public void invoke(Request request, Response response) throws IOException, ServletException {
         try {
             initValveParameters(request);
-            PrincipalWrapper principalWrapper = new PrincipalWrapper(request.getUserPrincipal());
-            // Be sure these cookies are not injected from the client
-            this.cookiesInspector.preventSpoofing(request.getCookies(), this.aiCookieNames, principalWrapper);
-            // Get the loginAsCookie and check if the user has rights to inject it in the request
-            Cookie loginAsCookie = this.loginAsCookieFactory.getLoginAsCookie(request.getCookies(), Constants.AI_LOGIN_AS, isLoginAsEnabled);
-            this.authorizer.autorizeLoginAs(this.groupsAllowed, loginAsCookie, principalWrapper, response, this.isLoginAsEnabled);
-            Cookie[] aicookies = aisCookieFactory.getCookies(this.aiCookieNames, principalWrapper, this.isCookiesUpperCase, this.isLoginAsEnabled, loginAsCookie);
-            addCookiesToRequest(aicookies, request);
+            if (request.getUserPrincipal() != null) {
+                PrincipalWrapper principalWrapper = new PrincipalWrapper(request.getUserPrincipal());
+                // Be sure these cookies are not injected from the client
+                this.cookiesInspector.preventSpoofing(request.getCookies(), this.aiCookieNames, principalWrapper);
+                // Get the loginAsCookie and check if the user has rights to inject it in the request
+                Cookie loginAsCookie = this.loginAsCookieFactory.getLoginAsCookie(request.getCookies(), Constants.AI_LOGIN_AS, isLoginAsEnabled);
+                this.authorizer.autorizeLoginAs(this.groupsAllowed, loginAsCookie, principalWrapper, response, this.isLoginAsEnabled);
+                Cookie[] aicookies = aisCookieFactory.getCookies(this.aiCookieNames, principalWrapper, this.isCookiesUpperCase, this.isLoginAsEnabled, loginAsCookie);
+                addCookiesToRequest(aicookies, request);
+            }
             getNext().invoke(request, response);
         } catch (HeaderInjectionException
                 | InstantiationException
@@ -74,16 +76,16 @@ public class AiCookiesValve extends ValveBase {
     }
 
     private void addCookiesToRequest(Cookie[] aicookies, Request request) {
-        for (Cookie cookie: aicookies){
+        for (Cookie cookie : aicookies) {
             request.addCookie(cookie);
         }
     }
 
     private void initValveParameters(Request request) throws ServletException {
         ServletContext servletContext = request.getServletContext();
-        this.aiCookieNames = this.initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.AICOOKIES), Constants.AICOOKIES, ",", false, Level.WARNING, MessagesKeys.NO_AI_COOKIES_CONFIGURED);
-        this.isLoginAsEnabled = Boolean.parseBoolean(initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.STATUS_LOGIN_AS), Constants.STATUS_LOGIN_AS, false, Level.WARNING, MessagesKeys.NO_AI_LOGIN_AS_CONFIGURED));
-        this.isCookiesUpperCase = Boolean.parseBoolean(initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.COOKIES_UPPER_CASE), Constants.COOKIES_UPPER_CASE, false, Level.WARNING, MessagesKeys.NO_COOKIES_UPPER_CASE_CONFIGURED));
-        this.groupsAllowed = initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.GROUPS_LOGIN_AS), Constants.GROUPS_LOGIN_AS, ",", false, Level.WARNING, MessagesKeys.NO_GROUPS_LOGIN_AS_CONFIGURED);
+        this.aiCookieNames = this.initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.AICOOKIES), Constants.AICOOKIES, ",", false, Level.FINEST, MessagesKeys.NO_AI_COOKIES_CONFIGURED);
+        this.isLoginAsEnabled = Boolean.parseBoolean(initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.STATUS_LOGIN_AS), Constants.STATUS_LOGIN_AS, false, Level.FINEST, MessagesKeys.NO_AI_LOGIN_AS_CONFIGURED));
+        this.isCookiesUpperCase = Boolean.parseBoolean(initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.COOKIES_UPPER_CASE), Constants.COOKIES_UPPER_CASE, false, Level.FINEST, MessagesKeys.NO_COOKIES_UPPER_CASE_CONFIGURED));
+        this.groupsAllowed = initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.GROUPS_LOGIN_AS), Constants.GROUPS_LOGIN_AS, ",", false, Level.FINEST, MessagesKeys.NO_GROUPS_LOGIN_AS_CONFIGURED);
     }
 }
