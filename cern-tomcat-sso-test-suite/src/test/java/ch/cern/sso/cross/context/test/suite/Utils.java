@@ -6,8 +6,6 @@
 package ch.cern.sso.cross.context.test.suite;
 
 import static ch.cern.sso.cross.context.test.suite.SsoAisFilterTest.browser;
-import java.util.Arrays;
-import java.util.Optional;
 import org.junit.Assert;
 import org.keycloak.testsuite.pages.LoginPage;
 import org.openqa.selenium.WebDriver;

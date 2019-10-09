@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ch.cern.sso.sp.tomcat</groupId>
     <artifactId>tomcat-sso-integration-components</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
     <packaging>pom</packaging>
     <modules>
         <module>cern-tomcat-session-utils</module>
@@ -15,7 +15,7 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <keycloak.version>7.0.0</keycloak.version>
-        <tomcat.version>8.5.9</tomcat.version> 
+        <tomcat.version>8.5.46</tomcat.version> 
     </properties>
     <dependencies>
         <dependency>
