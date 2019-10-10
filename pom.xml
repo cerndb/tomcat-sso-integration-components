@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ch.cern.sso.sp.tomcat</groupId>
     <artifactId>tomcat-sso-integration-components</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
     <packaging>pom</packaging>
     <modules>
         <module>cern-tomcat-session-utils</module>
@@ -65,4 +65,13 @@
             <url>${repository.target.snapshot.URL}</url>
         </snapshotRepository>
     </distributionManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.7</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>

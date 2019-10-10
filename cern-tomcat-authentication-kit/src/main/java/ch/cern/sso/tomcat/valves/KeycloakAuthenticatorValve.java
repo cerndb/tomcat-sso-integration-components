@@ -26,6 +26,7 @@ import org.keycloak.adapters.saml.tomcat.SamlAuthenticatorValve;
 public class KeycloakAuthenticatorValve extends SamlAuthenticatorValve {
 
     private SessionUtils sessionUtils;
+    private final static String KEYCLOAK_SAML_AUTH_TYPE = "KEYCLOAK-SAML";
 
     @Override
     protected void initInternal() {
@@ -40,7 +41,7 @@ public class KeycloakAuthenticatorValve extends SamlAuthenticatorValve {
         try {
             Logger.getLogger(KeycloakAuthenticatorValve.class.getName()).log(Level.FINE, "Checking SSO cookie");
             Cookie jsessionidsso = this.sessionUtils.searchCookie(request, org.apache.catalina.authenticator.Constants.SINGLE_SIGN_ON_COOKIE);
-            if (jsessionidsso != null && isValid(jsessionidsso)) {
+            if (jsessionidsso != null && isValid(jsessionidsso) && isAuthTypeKeycloak(request)) {
                 Logger.getLogger(KeycloakAuthenticatorValve.class.getName()).log(Level.FINE, "SSO cookie found: " + jsessionidsso.getValue());
                 authenticated = validateUserSession(request, jsessionidsso);
             } else {
@@ -91,5 +92,12 @@ public class KeycloakAuthenticatorValve extends SamlAuthenticatorValve {
 
     private boolean isValid(Cookie jsessionidsso) {
         return jsessionidsso.getMaxAge() != 0;
+    }
+    
+    private boolean isAuthTypeKeycloak(Request request) {
+        if(request.getAuthType()!=null && request.getAuthType().equals(KEYCLOAK_SAML_AUTH_TYPE)){
+            return true;
+        }
+        return false;
     }
 }
