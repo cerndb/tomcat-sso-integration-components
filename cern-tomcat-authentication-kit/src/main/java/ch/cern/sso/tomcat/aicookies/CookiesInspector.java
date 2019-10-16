@@ -7,12 +7,15 @@ import ch.cern.sso.tomcat.common.utils.MessagesKeys;
 import ch.cern.sso.tomcat.common.utils.PrincipalWrapper;
 import ch.cern.sso.tomcat.common.utils.SessionUtils;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
+import org.apache.catalina.connector.Request;
 
 /**
  *
@@ -53,6 +56,32 @@ public class CookiesInspector {
         } else {
             // If user clean the cookies this can happen
             LOGGER.log(Level.WARNING, messages.getString(MessagesKeys.NO_COOKIES_IN_HTTP_REQUEST));
+        }
+    }
+
+    public Cookie[] dropCookie(Cookie[] requestCookies, Cookie cookieToDrop) {
+        // If the request has no requestCookies be lazy
+        if (requestCookies != null) {
+            if (cookieToDrop != null) {
+                List<Cookie> cleanCookies = new ArrayList<Cookie>();
+                for (Cookie cookie : requestCookies) {
+                    if (!cookie.getName().equals(cookieToDrop.getName())) {
+                        cleanCookies.add(cookie);
+                    }
+                }
+                return cleanCookies.toArray(new Cookie[0]);
+            }
+        }
+        return requestCookies;
+    }
+    
+     public void dropCookie(Request request, Cookie cookieToDrop) {
+        Cookie[] cleanRequestCookies = dropCookie(request.getCookies(), cookieToDrop);
+        request.clearCookies();
+        if (cleanRequestCookies != null) {
+            for (Cookie cookie : cleanRequestCookies) {
+                request.addCookie(cookie);
+            }
         }
     }
 

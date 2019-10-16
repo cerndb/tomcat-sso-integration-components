@@ -17,6 +17,4 @@
 
 <Context path="/web-module-2" crossContext="true">
     <Valve className="ch.cern.sso.tomcat.valves.mocks.AuthenticatorMockValve"/>
-    <Parameter name="companyName" value="My Company, Incorporated"
-                override="false"/>
 </Context>
