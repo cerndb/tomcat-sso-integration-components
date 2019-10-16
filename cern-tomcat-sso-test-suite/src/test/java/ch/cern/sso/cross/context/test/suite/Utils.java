@@ -38,16 +38,21 @@ public class Utils {
             // Optional<String> cookieNameAndValue = Arrays.stream(cookieValuePair).filter(cvp -> cvp.contains(cookie)).findFirst();
             // TODO: avoid java 8 or upper features, sigh...
             String cookieNameAndValue = new String();
-            Assert.assertTrue("Cookie " + cookie + " has not been created.",cookieNameAndValue.isEmpty());
+            Assert.assertTrue("Cookie " + cookie + " has not been created.", cookieNameAndValue.isEmpty());
             // Check the value is not empty
             String value = cookieNameAndValue.split("-->")[1];
-            Assert.assertTrue("Cookie " + cookie + " value is empty", !value.isEmpty()); 
+            Assert.assertTrue("Cookie " + cookie + " value is empty", !value.isEmpty());
         }
     }
 
     public static void assertStringIsDisplayed(WebDriver browser, String stringToDisplay) {
         String pageSource = browser.getPageSource();
-        Assert.assertTrue(stringToDisplay + " is not display", pageSource.contains(stringToDisplay));
+        Assert.assertTrue(stringToDisplay + " is not displayed", pageSource.contains(stringToDisplay));
+    }
+
+    public static void assertStringIsNOTdisplayed(WebDriver browser, String stringToDisplay) {
+        String pageSource = browser.getPageSource();
+        Assert.assertFalse(stringToDisplay + " is displayed", pageSource.contains(stringToDisplay));
     }
 
     public static void testStringIsDisplayed(String url, String username, String password, String stringToDisplay) {

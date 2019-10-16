@@ -29,6 +29,7 @@ public class AuthenticatorMockValve extends AuthenticatorBase {
             XMLGregorianCalendar issueInstant = DatatypeFactory.newInstance().newXMLGregorianCalendar();
             AssertionType assertion = new AssertionType(MockConstants.SAML_PRINCIPAL_ID, issueInstant);
             MultivaluedHashMap<String, String> attributes = new MultivaluedHashMap<>();
+            MockConstants.initSamlPrincipalAttributes(attributes);
             MultivaluedHashMap<String, String> friendlyAttributes = new MultivaluedHashMap<>();
             this.samlPrincipal = new SamlPrincipal(assertion, MockConstants.PRINCIPAL_NAME, MockConstants.SAML_PRINCIPAL_SUBJECT, MockConstants.SAML_PRINCIPAL_NAME_ID_FORMAT, attributes, friendlyAttributes);
         } catch (DatatypeConfigurationException ex) {

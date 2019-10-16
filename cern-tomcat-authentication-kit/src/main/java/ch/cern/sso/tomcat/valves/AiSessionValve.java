@@ -7,7 +7,6 @@ import ch.cern.sso.tomcat.exceptions.WrongAiLoginAsCookieFormatException;
 import ch.cern.sso.tomcat.common.aisession.AiSessionFactory;
 import ch.cern.sso.tomcat.common.cookies.AisCookieFactory;
 import ch.cern.sso.tomcat.common.utils.Constants;
-import ch.cern.sso.tomcat.common.exceptions.HeaderInjectionException;
 import ch.cern.sso.tomcat.common.utils.InitParamsUtils;
 import ch.cern.sso.tomcat.common.utils.MessagesKeys;
 import ch.cern.sso.tomcat.common.utils.PrincipalWrapper;
@@ -43,6 +42,7 @@ public class AiSessionValve extends ValveBase {
     private String[] groupsAllowed;
     private Authorizer authorizer;
     private CookiesInspector cookiesInspector;
+    private Cookie cookieToDrop;
 
     @Override
     protected void initInternal() throws LifecycleException {
@@ -53,6 +53,7 @@ public class AiSessionValve extends ValveBase {
         this.loginAsCookieFactory = new LoginAsCookieFactory(this.sessionUtils);
         this.authorizer = new Authorizer();
         this.cookiesInspector = new CookiesInspector(sessionUtils);
+        this.cookieToDrop = new Cookie(Constants.AI_SESSION, "");
     }
 
     @Override
@@ -61,9 +62,8 @@ public class AiSessionValve extends ValveBase {
             initValveParameters(request);
             if (request.getUserPrincipal() != null) {
                 PrincipalWrapper principalWrapper = new PrincipalWrapper(request.getUserPrincipal());
-                String[] aiCookieNames = {Constants.AI_SESSION};
-                // Be sure AI_SESSION cookies are not injected from the client
-                this.cookiesInspector.preventSpoofing(request.getCookies(), aiCookieNames, principalWrapper);
+                // Be sure AI_SESSION cookie is not injected from the client
+                this.cookiesInspector.dropCookie(request, this.cookieToDrop);
                 // Get the loginAsCookie and check if the user has rights to inject it in the request
                 Cookie loginAsCookie = this.loginAsCookieFactory.getLoginAsCookie(request.getCookies(), Constants.AI_LOGIN_AS, isLoginAsEnabled);
                 authorizer.autorizeLoginAs(this.groupsAllowed, loginAsCookie, principalWrapper, response, this.isLoginAsEnabled);
@@ -76,7 +76,6 @@ public class AiSessionValve extends ValveBase {
                 | UnknownHostException
                 | InstantiationException
                 | NumberFormatException
-                | HeaderInjectionException
                 | RemoteException ex) {
             Logger.getLogger(AiSessionValve.class.getName()).log(Level.SEVERE, null, ex);
             response.sendError(HttpServletResponse.SC_FORBIDDEN, ex.getMessage());
@@ -87,6 +86,7 @@ public class AiSessionValve extends ValveBase {
         ServletContext servletContext = request.getServletContext();
         this.isLoginAsEnabled = Boolean.parseBoolean(initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.STATUS_LOGIN_AS), Constants.STATUS_LOGIN_AS, false, Level.FINEST, MessagesKeys.NO_AI_LOGIN_AS_CONFIGURED));
         this.groupsAllowed = initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.GROUPS_LOGIN_AS), Constants.GROUPS_LOGIN_AS, ",", false, Level.FINEST, MessagesKeys.NO_GROUPS_LOGIN_AS_CONFIGURED);
+        this.isCookiesUpperCase = Boolean.parseBoolean(initParamsUtils.getInitParameter(servletContext.getInitParameter(Constants.COOKIES_UPPER_CASE), Constants.COOKIES_UPPER_CASE, false, Level.FINEST, MessagesKeys.NO_COOKIES_UPPER_CASE_CONFIGURED));
     }
 
     private Cookie createAiSessionCookie(Request request, PrincipalWrapper principalWrapper, Cookie loginAsCookie) throws UnknownHostException, InstantiationException, NumberFormatException {

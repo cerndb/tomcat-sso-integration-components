@@ -58,7 +58,10 @@ public class AiCookiesValve extends ValveBase {
             if (request.getUserPrincipal() != null) {
                 PrincipalWrapper principalWrapper = new PrincipalWrapper(request.getUserPrincipal());
                 // Be sure these cookies are not injected from the client
-                this.cookiesInspector.preventSpoofing(request.getCookies(), this.aiCookieNames, principalWrapper);
+                for (String cookieName : this.aiCookieNames) {
+                    Cookie cookieToDrop = new Cookie(cookieName, "");
+                    this.cookiesInspector.dropCookie(request, cookieToDrop);
+                }
                 // Get the loginAsCookie and check if the user has rights to inject it in the request
                 Cookie loginAsCookie = this.loginAsCookieFactory.getLoginAsCookie(request.getCookies(), Constants.AI_LOGIN_AS, isLoginAsEnabled);
                 this.authorizer.autorizeLoginAs(this.groupsAllowed, loginAsCookie, principalWrapper, response, this.isLoginAsEnabled);
@@ -66,9 +69,7 @@ public class AiCookiesValve extends ValveBase {
                 addCookiesToRequest(aicookies, request);
             }
             getNext().invoke(request, response);
-        } catch (HeaderInjectionException
-                | InstantiationException
-                | RemoteException
+        } catch (RemoteException
                 | WrongAiLoginAsCookieFormatException ex) {
             Logger.getLogger(AiCookiesValve.class.getName()).log(Level.SEVERE, null, ex);
             response.sendError(HttpServletResponse.SC_FORBIDDEN, ex.getMessage());
