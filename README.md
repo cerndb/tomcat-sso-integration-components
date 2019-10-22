@@ -27,7 +27,7 @@ mvn -version
 git --version
 ```
 
-Add the [jeedy-applications maven repository](https://jeedy-nexus-repo.web.cern.ch/#browse/browse:jeedy-applications) to your settings.xml:
+The **cern-tomcat-sso-test-suite** has a dependency with the **[cern-servlet-basic-checks](https://gitlab.cern.ch/jeedy/sso-integrations/commons/common-sso-utils) ** one. This [maven](http://maven.apache.org/what-is-maven.html) artifact is stored in our [jeedy-applications maven repository](https://jeedy-nexus-repo.web.cern.ch/#browse/browse:jeedy-applications). In order your maven installation is able to download it, you have to declare it in your [maven settings configuration file](http://maven.apache.org/settings.html). 
 
 ```xml
     <profile>
@@ -42,8 +42,8 @@ Add the [jeedy-applications maven repository](https://jeedy-nexus-repo.web.cern.
         </repository>
       </repositories>
     </profile>
-``` 
-The reason for this is that the **cern-tomcat-sso-test-suite** has a dependency with the **[cern-servlet-basic-checks](https://gitlab.cern.ch/jeedy/sso-integrations/commons/common-sso-utils) ** one.
+```
+If you are not familiar with maven probably the [Maven in 5 Minutes ](http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html) can be helpful. In the last times I've found very good material about maven, and in general about java and spring stuff, at [baeldung web site](https://www.baeldung.com/maven). Also the good and old [mykong.com](https://www.mkyong.com/tutorials/maven-tutorials/) is a reliable source.
 
 Clone and build:
 
@@ -52,9 +52,21 @@ git clone https://:@gitlab.cern.ch:8443/jeedy/sso-integrations/tomcat-components
 cd tomcat-sso-integration-components/
 mvn clean package
 ```
-Once completed you will find the .jar files in the **target** folder of each module.
+Once completed you will find the .jar files in the **target** folder of each module. The two libraries that have to be installed in tomcat are:
 
-### Run
+1. **cern-tomcat-authentication.jar**
+2. **cern-tomcat-session-utils.jar**
+
+### Installation on tomcat
+
+The **cern-tomcat-authentication-kit.jar**, **cern-tomcat-session-utils.jar** and the **[keycloak tomcat saml adapter libraries](https://www.keycloak.org/downloads.html#saml)** must be added to the [common-loader](https://tomcat.apache.org/tomcat-9.0-doc/class-loader-howto.html). Just edit the `$CATALINA_BASE/conf/catalina.properties` and update the `common.loader` entry:
+
+```bash
+common.loader="${catalina.base}/lib","${catalina.base}/lib/*.jar","${catalina.home}/lib","${catalina.home}/lib/*.jar","${catalina.home}/sso/keycloak/lib/7.0.0/*.jar","${catalina.home}/sso/cern-custom/lib/*.jar"
+```
+The [Keycloaklibraries](https://downloads.jboss.org/keycloak/7.0.1/adapters/saml/keycloak-saml-tomcat-adapter-dist-7.0.1.zip) can be downloaded from the [keycloak downloads](https://www.keycloak.org/downloads.html) page.
+
+### Configuring tomcat
 
 Just declare in the [application context definition](https://tomcat.apache.org/tomcat-9.0-doc/config/context.html#Defining_a_context) the required valve(s) that implements your scenario. The valves are executed in the order their declarations are defined in the context configuration file. For instance:
 
@@ -67,13 +79,7 @@ Just declare in the [application context definition](https://tomcat.apache.org/t
 </Context>
 ```
 
-`KeycloakAuthenticatorValve` will be executed in the first place and  `AiCookiesValve` right after. Contrary to [servlet filters](https://tomcat.apache.org/tomcat-9.0-doc/servletapi/javax/servlet/Filter.html) where you can define `url-pattern` (see [servlet spec 6.2.4 chapter](https://javaee.github.io/servlet-spec/downloads/servlet-4.0/servlet-4_0_FINAL.pdf)), the valves are always inserted and executed in the request pipeline.
-
-The **cern-tomcat-authentication-kit.jar**, **cern-tomcat-session-utils.jar** and the **[keycloak tomcat saml adapter libraries](https://www.keycloak.org/downloads.html#saml)** must be added to the [common-loader](https://tomcat.apache.org/tomcat-9.0-doc/class-loader-howto.html). Just edit the `$CATALINA_BASE/conf/catalina.properties` and update the `common.loader` entry:
-
-```bash
-common.loader="${catalina.base}/lib","${catalina.base}/lib/*.jar","${catalina.home}/lib","${catalina.home}/lib/*.jar","${catalina.home}/sso/keycloak/lib/7.0.0/*.jar","${catalina.home}/sso/cern-custom/lib/*.jar"
-```
+`KeycloakAuthenticatorValve` will be executed in the first place and  `AiCookiesValve` right after. Contrary to [servlet filters](https://tomcat.apache.org/tomcat-9.0-doc/servletapi/javax/servlet/Filter.html) where you can define `url-pattern` (see [servlet spec 6.2.4 chapter](https://javaee.github.io/servlet-spec/downloads/servlet-4.0/servlet-4_0_FINAL.pdf)), the valves are always inserted and executed in the request pipeline. 
 
 **IMPORTANT**: ensure that you declare [org.apache.catalina.authenticator.SingleSignOn](https://tomcat.apache.org/tomcat-9.0-doc/config/valve.html#Single_Sign_On_Valve) in your `$CATALINA_BASE/conf/server.xml`. This valves keeps the tomcat SSO session that allows the calls between contexts withouth being redirected to the authentication page (login.cern.ch).
 
@@ -177,7 +183,7 @@ In the same fashion as the AiSessionValve this class will add the set of cookies
 
 #### Header injection: SsoHeadersValve
 
-Some applications like the [ERP](wos.cern.ch) (formerly known as [Qualiac](https://www.cegid.com/fr/produits/cegid-xrp-ultimate/) Qualiac) and [CERN APEX applications](https://apex-sso.cern.ch/pls/htmldb_devdb11/f?p=265:1) CERN APEX applications require the injection of a header in the request with the authenticated user name. SsoHeadersValve [decorates](https://www.oracle.com/technetwork/testcontent/decorators-099517.html) decorates the http request **overridinng** the different **getHeader** methods of the [HttpServletRequest](https://tomcat.apache.org/tomcat-9.0-doc/servletapi/javax/servlet/http/HttpServletRequest.html). In this way when the application invokes any of these methods it will be invoking our code.
+Some applications like the [ERP](wos.cern.ch) (formerly known as [Qualiac](https://www.cegid.com/fr/produits/cegid-xrp-ultimate/) Qualiac) and [CERN APEX applications](https://apex-sso.cern.ch/pls/htmldb_devdb11/f?p=265:1) require the injection of a header in the request with the authenticated user name. SsoHeadersValve [decorates](https://www.oracle.com/technetwork/testcontent/decorators-099517.html) the http request, **overriding** the different **getHeader** methods of the [HttpServletRequest](https://tomcat.apache.org/tomcat-9.0-doc/servletapi/javax/servlet/http/HttpServletRequest.html). In this way when the application invokes any of these methods it will be invoking our code.
 
 #### RequestUriValve
 
