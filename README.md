@@ -89,7 +89,13 @@ Just declare in the [application context definition](https://tomcat.apache.org/t
 
 ### Tests
 
-You can find them at [cern-tomcat-sso-test-suite](https://gitlab.cern.ch/jeedy/sso-integrations/tomcat-components/tomcat-sso-integration-components/tree/master/cern-tomcat-sso-test-suite). Each of them run an [embedded tomcat](https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat) and make use of the [AuthenticatorMockValve](https://gitlab.cern.ch/jeedy/sso-integrations/tomcat-components/tomcat-sso-integration-components/blob/master/cern-tomcat-authentication-kit/src/main/java/ch/cern/sso/tomcat/valves/mocks/AuthenticatorMockValve.java). This class creates an instance of [org.apache.catalina.realm.GenericPrincipal](https://tomcat.apache.org/tomcat-9.0-doc/api/org/apache/catalina/realm/GenericPrincipal.html) which contains an instance of [org.keycloak.adapters.saml.SamlPrincipal](https://access.redhat.com/webassets/avalon/d/red-hat-single-sign-on/version-7.0.0/javadocs/org/keycloak/adapters/saml/SamlPrincipal.html) with all the [attributes](https://gitlab.cern.ch/jeedy/sso-integrations/tomcat-components/tomcat-sso-integration-components/blob/master/cern-tomcat-authentication-kit/src/main/java/ch/cern/sso/tomcat/valves/mocks/MockConstants.java) attributes of the authenticated user.
+You can find them at [cern-tomcat-sso-test-suite](https://gitlab.cern.ch/jeedy/sso-integrations/tomcat-components/tomcat-sso-integration-components/tree/master/cern-tomcat-sso-test-suite). 
+
+Each of them run an [embedded tomcat](https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat) behind the scenes.
+
+#### AuthenticatorMockValve
+
+ This [class](https://gitlab.cern.ch/jeedy/sso-integrations/tomcat-components/tomcat-sso-integration-components/blob/master/cern-tomcat-authentication-kit/src/main/java/ch/cern/sso/tomcat/valves/mocks/AuthenticatorMockValve.java) creates an instance of [org.apache.catalina.realm.GenericPrincipal](https://tomcat.apache.org/tomcat-9.0-doc/api/org/apache/catalina/realm/GenericPrincipal.html) which contains an instance of [org.keycloak.adapters.saml.SamlPrincipal](https://access.redhat.com/webassets/avalon/d/red-hat-single-sign-on/version-7.0.0/javadocs/org/keycloak/adapters/saml/SamlPrincipal.html) with all the [attributes](https://gitlab.cern.ch/jeedy/sso-integrations/tomcat-components/tomcat-sso-integration-components/blob/master/cern-tomcat-authentication-kit/src/main/java/ch/cern/sso/tomcat/valves/mocks/MockConstants.java) attributes of the authenticated user.
 
 The context.xml of each test webapp can be found under [src/test/resources/keycloak-saml](https://gitlab.cern.ch/jeedy/sso-integrations/tomcat-components/tomcat-sso-integration-components/tree/master/cern-tomcat-sso-test-suite/src/test/resources/keycloak-saml): 
 
@@ -135,7 +141,42 @@ For instance in the above example we want to test the different use cases of the
     
 </web-app>
 ```
-You can always skip them with the **-DskipTests=true** maven option.
+
+#### BasicAuthenticatorMockPrincipalInjectionValve
+
+This class checks if there is an [authorization header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) in the HTTP request. If not it invokes the [doAuthenticate() method](https://github.com/apache/tomcat/blob/6bc2615e2a05647e92816f6a52be8bbd5d82cb23/java/org/apache/catalina/authenticator/BasicAuthenticator.java#L80) of the parent class, `org.apache.catalina.authenticator.BasicAuthenticator` which will pop-up the good old classic **basic authentication screen**. You can enter any credentials. The credentials adds the authorization header in the request, making the valve to inject an instance of `GenericPrincipal` in the request. Below you can find a test case for this valve:
+
+```java
+    @Test
+    public void testUserIsAuthenticated() {
+        WebDriver browser = getBrowser(null, null);
+        browser.get("http://localhost:8082/web-module-1/principal-info");
+        Utils.assertTitleEquals(browser, "HTTP Status 401 – Unauthorized");
+        browser = getBrowser("Authorization", "Basic YWxhZGRpbjpvcGVuc2VzYW1l");
+        browser.get("http://localhost:8082/web-module-1/principal-info");
+        Utils.assertStringIsDisplayed(browser, MockConstants.PRINCIPAL_NAME);
+        browser.close();
+    }
+```
+
+The **context.xml** of **/web-module-1** would look like this:
+
+```xml
+<Context>
+    <Valve className="ch.cern.sso.tomcat.valves.mocks.BasicAuthenticatorMockPrincipalInjectionValve"/>
+</Context>
+```
+
+And remember to add the `<login-config>` element in your web.xml:
+
+```xml
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>web-module-1 protected area</realm-name>
+    </login-config>
+```
+
+**NOTE**: you can always skip the tests with the **-DskipTests=true** maven option.
 
 ### Versions and CI
 
@@ -153,7 +194,7 @@ The `<version>` element in the parent pom declares current **SNAPSHOT** version 
 When you start to work in a new feature you can:
 
 1. Create a new branch linked with the [corresponding JIRA issue](https://its.cern.ch/jira/browse/JEEDY-543) `git checkout -b jeedy-1289-readme`  
-2. Increase the SNAPSHOT version. You can use `mvn versions:set -DnextSnapshot=true`. 
+2. Increase the SNAPSHOT version. You can use `mvn versions:set -DnextSnapshot=true`. You can find more info about the versions plugin [here](https://www.mojohaus.org/versions-maven-plugin/). 
 
 Pushing your changes to the branch will trigger the **snapshot-package-build** in the [gitlab-ci job](https://gitlab.cern.ch/jeedy/sso-integrations/commons/common-sso-utils/blob/master/.gitlab-ci.yml), uploading the target jars to the [snapshots nexus repository](https://jeedy-nexus-repo.web.cern.ch/#browse/browse:jeedy-applications-snapshot). Once the changes are merged, **release-package-build** will be triggered and the jars will be uploaded to the [release nexus repository](https://jeedy-nexus-repo.web.cern.ch/#browse/browse:jeedy-applications-release).
              

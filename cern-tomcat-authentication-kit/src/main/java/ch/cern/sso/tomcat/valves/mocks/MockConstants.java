@@ -1,7 +1,18 @@
 package ch.cern.sso.tomcat.valves.mocks;
 
 import ch.cern.sso.tomcat.common.utils.SsoClaims;
+import java.security.Principal;
+import java.util.Arrays;
+import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import org.apache.catalina.connector.Request;
+import org.apache.catalina.realm.GenericPrincipal;
+import org.keycloak.adapters.saml.SamlPrincipal;
 import org.keycloak.common.util.MultivaluedHashMap;
+import org.keycloak.dom.saml.v2.assertion.AssertionType;
 
 /**
  *
@@ -38,5 +49,19 @@ public class MockConstants {
         attributes.add(SsoClaims.SSO_CLAIM_COMMON_NAME, "lurodrig");
         attributes.add(SsoClaims.SSO_CLAIM_ROLE, "CERN Users");
         attributes.add(SsoClaims.SSO_CLAIM_FEDERATION, "CERN");
+    }
+
+    public static SamlPrincipal createSamlPrincipal() throws DatatypeConfigurationException {
+        XMLGregorianCalendar issueInstant = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+        AssertionType assertion = new AssertionType(MockConstants.SAML_PRINCIPAL_ID, issueInstant);
+        MultivaluedHashMap<String, String> attributes = new MultivaluedHashMap<>();
+        MockConstants.initSamlPrincipalAttributes(attributes);
+        MultivaluedHashMap<String, String> friendlyAttributes = new MultivaluedHashMap<>();
+        return new SamlPrincipal(assertion, MockConstants.PRINCIPAL_NAME, MockConstants.SAML_PRINCIPAL_SUBJECT, MockConstants.SAML_PRINCIPAL_NAME_ID_FORMAT, attributes, friendlyAttributes);
+    }
+    
+     public static GenericPrincipal createGenericPrincipal(Principal principal) {
+        List<String> roles = Arrays.asList(MockConstants.ROLES);
+        return new GenericPrincipal(PRINCIPAL_NAME, PRINCIPAL_PASSWORD, roles, principal);
     }
 }

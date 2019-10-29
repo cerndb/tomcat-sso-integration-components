@@ -7,12 +7,12 @@
     <module-name>web-module-1</module-name>
     
     <servlet>
-        <servlet-name>RequestInfoServlet</servlet-name>
-        <servlet-class>ch.cern.sso.sp.examples.RequestInfoServlet</servlet-class>
+        <servlet-name>PrincipalInfoServlet</servlet-name>
+        <servlet-class>ch.cern.examples.servlets.PrincipalInfoServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>RequestInfoServlet</servlet-name>
-        <url-pattern>/request-info</url-pattern>
+        <servlet-name>PrincipalInfoServlet</servlet-name>
+        <url-pattern>/principal-info</url-pattern>
     </servlet-mapping>
     
     <security-constraint>
@@ -27,5 +27,10 @@
     <security-role>
         <role-name>*</role-name>
     </security-role>
+    
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>web-module-1 protected area</realm-name>
+    </login-config>
       
 </web-app>

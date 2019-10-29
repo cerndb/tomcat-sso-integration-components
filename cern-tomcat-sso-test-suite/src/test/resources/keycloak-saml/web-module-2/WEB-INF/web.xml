@@ -8,7 +8,7 @@
     
     <servlet>
         <servlet-name>PrincipalInfoServlet</servlet-name>
-        <servlet-class>ch.cern.sso.sp.examples.PrincipalInfoServlet</servlet-class>
+        <servlet-class>ch.cern.examples.servlets.PrincipalInfoServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>PrincipalInfoServlet</servlet-name>

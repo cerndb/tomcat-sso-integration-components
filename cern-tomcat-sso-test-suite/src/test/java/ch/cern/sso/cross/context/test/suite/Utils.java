@@ -55,6 +55,11 @@ public class Utils {
         Assert.assertFalse(stringToDisplay + " is displayed", pageSource.contains(stringToDisplay));
     }
 
+    public static void assertTitleEquals(WebDriver browser, String expectedTitle) {
+        String title = browser.getTitle();
+        Assert.assertTrue(expectedTitle + " not equals to " + title, title.equals(expectedTitle));
+    }
+
     public static void testStringIsDisplayed(String url, String username, String password, String stringToDisplay) {
         browser.get(url);
         Utils.assertAtLoginPagePostBinding(browser);

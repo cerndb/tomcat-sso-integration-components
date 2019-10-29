@@ -16,5 +16,5 @@
 -->
 
 <Context path="/web-module-1" crossContext="true">
-    <Valve className="ch.cern.sso.tomcat.valves.KeycloakAuthenticatorValve"/>
+    <Valve className="ch.cern.sso.tomcat.valves.mocks.BasicAuthenticatorMockPrincipalInjectionValve"/>
 </Context>

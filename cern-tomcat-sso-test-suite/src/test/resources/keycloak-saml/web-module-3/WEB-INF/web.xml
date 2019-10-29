@@ -8,7 +8,7 @@
 
     <servlet>
         <servlet-name>CookieInfoServlet</servlet-name>
-        <servlet-class>ch.cern.sso.sp.examples.CookieInfoServlet</servlet-class>
+        <servlet-class>ch.cern.examples.servlets.CookieInfoServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CookieInfoServlet</servlet-name>
