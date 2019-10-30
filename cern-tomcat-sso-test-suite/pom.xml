@@ -4,7 +4,7 @@
     <parent>
         <groupId>ch.cern.sso.sp.tomcat</groupId>
         <artifactId>tomcat-sso-integration-components</artifactId>
-        <version>2.0.5-SNAPSHOT</version>
+        <version>2.0.6-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>cern-tomcat-sso-test-suite</artifactId>
