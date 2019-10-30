@@ -144,7 +144,7 @@ For instance in the above example we want to test the different use cases of the
 
 #### BasicAuthenticatorMockPrincipalInjectionValve
 
-This class checks if there is an [authorization header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) in the HTTP request. If not it invokes the [doAuthenticate() method](https://github.com/apache/tomcat/blob/6bc2615e2a05647e92816f6a52be8bbd5d82cb23/java/org/apache/catalina/authenticator/BasicAuthenticator.java#L80) of the parent class, `org.apache.catalina.authenticator.BasicAuthenticator` which will pop-up the good old classic **basic authentication screen**. You can enter any credentials. The credentials adds the authorization header in the request, making the valve to inject an instance of `GenericPrincipal` in the request. Below you can find a test case for this valve:
+This class checks if there is an [authorization header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) in the HTTP request. If not it invokes the [doAuthenticate() method](https://github.com/apache/tomcat/blob/6bc2615e2a05647e92816f6a52be8bbd5d82cb23/java/org/apache/catalina/authenticator/BasicAuthenticator.java#L80) of the parent class, `org.apache.catalina.authenticator.BasicAuthenticator` which will pop-up the good old classic **basic authentication screen**. You can enter any credentials. The credentials adds the authorization header in the request, making the valve to inject an instance of `GenericPrincipal` in the request. Developers can configure username and roles via `mock.username` and `mock.roles` context parameters. Below you can find a test case for this valve:
 
 ```java
     @Test
@@ -164,6 +164,8 @@ The **context.xml** of **/web-module-1** would look like this:
 ```xml
 <Context>
     <Valve className="ch.cern.sso.tomcat.valves.mocks.BasicAuthenticatorMockPrincipalInjectionValve"/>
+    <Parameter name="mock.username" value="bob" override="true"/>
+    <Parameter name="mock.roles" value="edh-self-service-stores-catalog,it-dep-db-dar" override="true"/>
 </Context>
 ```
 

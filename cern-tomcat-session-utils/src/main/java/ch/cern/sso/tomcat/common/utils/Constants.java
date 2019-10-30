@@ -46,4 +46,6 @@ public final class Constants {
     public static final String SSO_REMOTE_USER = "SSO_REMOTE_USER";
     public static final String SSO_REMOTE_HOST = "SSO_REMOTE_HOST";
     public static final String REMOTE_USER = "REMOTE_USER";
+    public static final String MOCK_USERNAME = "mock.username";
+    public static final String MOCK_ROLES = "mock.roles";
 }
