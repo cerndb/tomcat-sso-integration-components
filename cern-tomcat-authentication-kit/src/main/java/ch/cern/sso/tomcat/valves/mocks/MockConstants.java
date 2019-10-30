@@ -59,9 +59,4 @@ public class MockConstants {
         MultivaluedHashMap<String, String> friendlyAttributes = new MultivaluedHashMap<>();
         return new SamlPrincipal(assertion, MockConstants.PRINCIPAL_NAME, MockConstants.SAML_PRINCIPAL_SUBJECT, MockConstants.SAML_PRINCIPAL_NAME_ID_FORMAT, attributes, friendlyAttributes);
     }
-    
-     public static GenericPrincipal createGenericPrincipal(Principal principal) {
-        List<String> roles = Arrays.asList(MockConstants.ROLES);
-        return new GenericPrincipal(PRINCIPAL_NAME, PRINCIPAL_PASSWORD, roles, principal);
-    }
 }
