@@ -17,4 +17,6 @@
 
 <Context path="/web-module-2" crossContext="true">
     <Valve className="ch.cern.sso.tomcat.valves.mocks.AuthenticatorMockValve"/>
+    <Valve className="ch.cern.sso.tomcat.valves.SsoHeadersValve"/>
+    <Parameter name="sso.remote.headers" value="SSO_REMOTE_USER"/>
 </Context>
