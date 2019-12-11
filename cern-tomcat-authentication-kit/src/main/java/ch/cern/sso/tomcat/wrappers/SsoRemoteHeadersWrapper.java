@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -36,19 +37,22 @@ public class SsoRemoteHeadersWrapper extends HttpServletRequestWrapper {
 
     @Override
     public Enumeration<String> getHeaderNames() {
+        TreeMap<String, String> headers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        headers.putAll(this.headersToInject);
         Set<String> originalHeadersNames = new HashSet<String>(Collections.list(super.getHeaderNames()));
-        Set<String> headersToInjectNames = headersToInject.keySet();
-        originalHeadersNames.addAll(headersToInjectNames);
-        return Collections.enumeration(originalHeadersNames);
+        for (String originalHeaderName : originalHeadersNames) {
+            headers.put(originalHeaderName, super.getHeader(originalHeaderName));
+        }
+        return Collections.enumeration(headers.keySet());
     }
 
     @Override
     public Enumeration<String> getHeaders(String name) {
         List<String> values = new ArrayList<String>();
         // If the target application is looking for one of our injected headers
-        // do not look in the original one. This avoid header spoofing
-        if (headersToInject.containsKey(name)) {
-            values.add(headersToInject.get(name));
+        // do not look in the original one. This avoids header spoofing
+        if (headersToInject.containsKey(name.toUpperCase())) {
+            values.add(headersToInject.get(name.toUpperCase()));
         } else {
             values = Collections.list(super.getHeaders(name));
         }
@@ -59,8 +63,8 @@ public class SsoRemoteHeadersWrapper extends HttpServletRequestWrapper {
     public String getHeader(String name) {
         String headerValue = super.getHeader(name);
         // Our headers always prevail, so no possible spoofing
-        if (headersToInject.containsKey(name)) {
-            headerValue = headersToInject.get(name);
+        if (headersToInject.containsKey(name.toUpperCase())) {
+            headerValue = headersToInject.get(name.toUpperCase());
         }
         return headerValue;
     }

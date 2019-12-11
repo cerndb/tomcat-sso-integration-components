@@ -226,7 +226,19 @@ In the same fashion as the AiSessionValve this class will add the set of cookies
 
 #### Header injection: SsoHeadersValve
 
-Some applications like the [ERP](wos.cern.ch) (formerly known as [Qualiac](https://www.cegid.com/fr/produits/cegid-xrp-ultimate/) Qualiac) and [CERN APEX applications](https://apex-sso.cern.ch/pls/htmldb_devdb11/f?p=265:1) require the injection of a header in the request with the authenticated user name. SsoHeadersValve [decorates](https://www.oracle.com/technetwork/testcontent/decorators-099517.html) the http request, **overriding** the different **getHeader** methods of the [HttpServletRequest](https://tomcat.apache.org/tomcat-9.0-doc/servletapi/javax/servlet/http/HttpServletRequest.html). In this way when the application invokes any of these methods it will be invoking our code.
+Some applications like the [ERP](wos.cern.ch) (formerly known as [Qualiac](https://www.cegid.com/fr/produits/cegid-xrp-ultimate/) Qualiac) and [CERN APEX applications](https://apex-sso.cern.ch/pls/htmldb_devdb11/f?p=265:1) require the injection of a header in the request with the authenticated user name. SsoHeadersValve [decorates](https://www.oracle.com/technetwork/testcontent/decorators-099517.html) the http request, **overriding** the different **getHeader** methods of the [HttpServletRequest](https://tomcat.apache.org/tomcat-9.0-doc/servletapi/javax/servlet/http/HttpServletRequest.html). In this way when the application invokes any of these methods it will be invoking our code. You can find an example of its configuration below:
+
+```xml
+<Context path="/web-module-2" crossContext="true">
+    <Valve className="ch.cern.sso.tomcat.valves.mocks.AuthenticatorMockValve"/>
+    <Valve className="ch.cern.sso.tomcat.valves.SsoHeadersValve"/>
+    <Parameter name="sso.remote.headers" value="SSO_REMOTE_USER"/>
+</Context>
+```
+
+This valve admits three headers:
+`SSO_REMOTE_USER` & `REMOTE_USER`: both are filled with `request.getUserPrincipal().getName()`. First one is used in the APEX applications and second one by Qualiac.
+`SSO_REMOTE_HOST`: takes its value from [request.getRemoteAddr()](https://tomcat.apache.org/tomcat-9.0-doc/servletapi/javax/servlet/ServletRequest.html#getRemoteAddr--) It is used by mainly by the EDMS applications for identify the client. **NOTE**: this will not work in a *"multi-proxy environment"* like our kubernetes setup.
 
 #### RequestUriValve
 

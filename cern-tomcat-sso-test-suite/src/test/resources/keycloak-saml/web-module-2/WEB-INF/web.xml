@@ -7,6 +7,14 @@
     <module-name>web-module-2</module-name>
     
     <servlet>
+        <servlet-name>RequestInfoServlet</servlet-name>
+        <servlet-class>ch.cern.examples.servlets.RequestInfoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RequestInfoServlet</servlet-name>
+        <url-pattern>/request-info</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>PrincipalInfoServlet</servlet-name>
         <servlet-class>ch.cern.examples.servlets.PrincipalInfoServlet</servlet-class>
     </servlet>
