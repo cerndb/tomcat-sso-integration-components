@@ -5,3 +5,5 @@ target/
 *.versionsBackup
 test-suite/tomcat.8082/
 **/*.log
+.idea/
+**/*.iml
