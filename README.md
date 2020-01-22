@@ -244,6 +244,10 @@ This valve admits three headers:
 
 The [ERP](wos.cern.ch) expose some URLs with listings of documents. In the current configuration these URLs are behind two proxies. This is causing some issues when the document names contain blank spaces. In order to solve this issues we have to provide an implementation of [getRequestURI](https://tomcat.apache.org/tomcat-9.0-doc/servletapi/javax/servlet/http/HttpServletRequest.html#getRequestURI). Hopefully with the new simplified architecture this valve is not needed anymore.  
 
+#### OrdsBasicAuthValve 
+
+With [Oracle REST Data Services](https://www.oracle.com/database/technologies/appdev/rest.html) (ORDS) running on Tomcat there exists a problem when authenticating through realms other than UserDatabaseRealm. This valve solves that issue for ORDS >= 18.1.1. For more information see [db-blog entry](http://db-blog.web.cern.ch/blog/jakub-granieczny/2019-12-oracle-rest-data-services-running-tomcat-basic-authentication-using).
+
 ### Java 7???
 
 Yes, as there are few applications still using Java7 I have declared both `maven.compiler.source` and `maven.compiler.target` `1.7` :(   
