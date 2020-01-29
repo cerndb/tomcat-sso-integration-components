@@ -27,11 +27,23 @@ public class KeycloakAuthenticatorValve extends SamlAuthenticatorValve {
 
     private SessionUtils sessionUtils;
     private final static String KEYCLOAK_SAML_AUTH_TYPE = "KEYCLOAK-SAML";
+    private String logoutPage = "https://login.cern.ch/adfs/ls/?wa=wsignout1.0";
+    private String startLogoutParameterName = "GLO";
+    private String startLogoutParameterValue = "true";
 
     @Override
     protected void initInternal() {
         this.sessionUtils = new SessionUtils();
         super.initInternal();
+        if (System.getProperty("jeedy.tomcat.sso.logout.page") != null) {
+            this.logoutPage = System.getProperty("jeedy.tomcat.sso.logout.page");
+        }
+        if (System.getProperty("jeedy.tomcat.sso.logout.start.parameter.name") != null) {
+            this.startLogoutParameterName = System.getProperty("jeedy.tomcat.sso.logout.start.parameter.name");
+        }
+        if (System.getProperty("jeedy.tomcat.sso.logout.start.parameter.value") != null) {
+            this.startLogoutParameterValue = System.getProperty("jeedy.tomcat.sso.logout.start.parameter.value");
+        }
         Logger.getLogger(KeycloakAuthenticatorValve.class.getName()).log(Level.FINE, "Initialized");
     }
 
@@ -62,15 +74,19 @@ public class KeycloakAuthenticatorValve extends SamlAuthenticatorValve {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
             Logger.getLogger(KeycloakAuthenticatorValve.class.getName()).log(Level.SEVERE, null, ex);
         }
+        if (isStartLogout(request)) {
+            authenticated = super.doAuthenticate(request, response);
+            register(request, response, null, null, null, null);
+        }
         return authenticated;
     }
 
     @Override
     public void invoke(Request request, Response response) throws IOException, ServletException {
-        if (isLogout(request)) {
-            logout(request);
-        }
         super.invoke(request, response);
+        if (isFinishLogout(request)) {
+            response.sendRedirect(response.encodeRedirectURL(this.logoutPage));
+        }
     }
 
     private boolean validateUserSession(Request request, Cookie jsessionidsso) {
@@ -86,16 +102,20 @@ public class KeycloakAuthenticatorValve extends SamlAuthenticatorValve {
         return false;
     }
 
-    private boolean isLogout(Request request) {
-        return request.getRequestURI().equals("/saml2slo/saml");
+    private boolean isStartLogout(Request request) {
+        return request.getParameter(this.startLogoutParameterName) != null && request.getParameter(this.startLogoutParameterName).equals(this.startLogoutParameterValue);
+    }
+
+    private boolean isFinishLogout(Request request) {
+        return request.getRequestURI().substring(request.getContextPath().length()).endsWith("/saml2slo/saml");
     }
 
     private boolean isValid(Cookie jsessionidsso) {
         return jsessionidsso.getMaxAge() != 0;
     }
-    
+
     private boolean isAuthTypeKeycloak(Request request) {
-        if(request.getAuthType()!=null && request.getAuthType().equals(KEYCLOAK_SAML_AUTH_TYPE)){
+        if (request.getAuthType() != null && request.getAuthType().equals(KEYCLOAK_SAML_AUTH_TYPE)) {
             return true;
         }
         return false;
