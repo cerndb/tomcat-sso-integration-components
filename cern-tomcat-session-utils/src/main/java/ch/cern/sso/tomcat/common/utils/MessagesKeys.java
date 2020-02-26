@@ -33,4 +33,5 @@ public class MessagesKeys {
     public static final String NO_GROUPS_EQUALS_STRICT_CONFIGURED = "NO_GROUPS_EQUALS_STRICT_CONFIGURED";
     public static final String HEADER_SPOOF = "HEADER_SPOOF";
     public static final String NO_SSO_REMOTE_HEADERS_CONFIGURED = "NO_SSO_REMOTE_HEADERS_CONFIGURED";
+    public static final String NO_GUARDED_HEADERS_CONFIGURED = "NO_GUARDED_HEADERS_CONFIGURED";
 }
