@@ -50,7 +50,7 @@ public class InitParamsUtils {
             // It must contain an array of "regex" separated values
             return value.split(regex);
         }
-        return null;
+        return new String[]{};
     }
 
 }
