@@ -10,10 +10,10 @@ package ch.cern.sso.tomcat.loginas;
  * @author lurodrig
  */
 public enum AiLoginAsCookiePattern {
-    USERNAME("[a-zA-Z]{3,8}"),
-    USERNAME_HRID("[a-zA-Z]{3,8}:[0-9]+"),
-    USERNAME_LANG("[a-zA-Z]{3,8}:[e|E|f|F]+"),
-    USERNAME_HRID_LANG("[a-zA-Z]{3,8}:[0-9]+:[e|E|f|F]+");
+    USERNAME("^[a-zA-Z][a-zA-Z0-9]{2,7}"),
+    USERNAME_HRID("^[a-zA-Z][a-zA-Z0-9]{2,7}:[0-9]+"),
+    USERNAME_LANG("^[a-zA-Z][a-zA-Z0-9]{2,7}:[e|E|f|F]+"),
+    USERNAME_HRID_LANG("^[a-zA-Z][a-zA-Z0-9]{2,7}:[0-9]+:[e|E|f|F]+");
 
     private final String pattern;
 
