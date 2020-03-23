@@ -5,12 +5,15 @@
  */
 package ch.cern.sso.cross.context.test.suite;
 
-import java.io.File;
+import ch.cern.sso.cross.context.test.suite.utils.HtmlUnitTestDriver;
+import ch.cern.sso.cross.context.test.suite.utils.Utils;
 import org.apache.catalina.startup.Tomcat;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+
+import java.io.File;
 
 /**
  *
@@ -20,8 +23,8 @@ public class SsoHeadersValveTest {
 
     protected String APP_SERVER_BASE_URL = "http://localhost:8082";
 
-    static Tomcat tomcat = null;
-    static final String SPOOFED_SSO_REMOTE_USER_HEADER_VALUE = "spoof";
+    private static Tomcat tomcat = null;
+    private static final String SPOOFED_SSO_REMOTE_USER_HEADER_VALUE = "spoof";
 
     @BeforeClass
     public static void initTomcat() throws Exception {

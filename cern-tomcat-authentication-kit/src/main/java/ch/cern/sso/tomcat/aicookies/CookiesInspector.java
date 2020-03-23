@@ -61,21 +61,29 @@ public class CookiesInspector {
 
     public Cookie[] dropCookie(Cookie[] requestCookies, Cookie cookieToDrop) {
         // If the request has no requestCookies be lazy
-        if (requestCookies != null) {
-            if (cookieToDrop != null) {
-                List<Cookie> cleanCookies = new ArrayList<Cookie>();
-                for (Cookie cookie : requestCookies) {
-                    if (!cookie.getName().equals(cookieToDrop.getName())) {
-                        cleanCookies.add(cookie);
-                    }
-                }
-                return cleanCookies.toArray(new Cookie[0]);
+        if (cookieToDrop == null) {
+            return requestCookies;
+        }
+        return dropCookie(requestCookies, cookieToDrop.getName());
+    }
+
+    private Cookie[] dropCookie(Cookie[] requestCookies, String cookieToDrop) {
+        // If the request has no requestCookies be lazy
+        if (requestCookies == null){
+            return requestCookies;
+        }
+
+        List<Cookie> cleanCookies = new ArrayList<>();
+        for (Cookie cookie : requestCookies) {
+            if (!cookie.getName().equals(cookieToDrop)) {
+                cleanCookies.add(cookie);
             }
         }
-        return requestCookies;
+        return cleanCookies.toArray(new Cookie[0]);
+
     }
-    
-     public void dropCookie(Request request, Cookie cookieToDrop) {
+
+    public void dropCookie(Request request, Cookie cookieToDrop) {
         Cookie[] cleanRequestCookies = dropCookie(request.getCookies(), cookieToDrop);
         request.clearCookies();
         if (cleanRequestCookies != null) {
@@ -84,6 +92,22 @@ public class CookiesInspector {
             }
         }
     }
+
+    public void dropCookies(Request request, Cookie[] cookiesToDrop) {
+        if(cookiesToDrop == null)
+            return;
+        dropCookies(request,getCookieNames(cookiesToDrop));
+    }
+    private void dropCookies(Request request, String[] cookiesToDrop) {
+        List<String> cookiesToDropList = Arrays.asList(cookiesToDrop);
+        Cookie[] requestCookies = request.getCookies();
+        request.clearCookies();
+        for (Cookie cookie : requestCookies) {
+            if(!cookiesToDropList.contains(cookie.getName()))
+                request.addCookie(cookie);
+        }
+    }
+
 
     private String[] getCookieNames(Cookie[] cookies) {
         String[] result = new String[cookies.length];

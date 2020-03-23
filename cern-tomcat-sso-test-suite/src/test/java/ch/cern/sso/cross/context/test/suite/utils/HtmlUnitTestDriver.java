@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.cern.sso.cross.context.test.suite;
+package ch.cern.sso.cross.context.test.suite.utils;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 

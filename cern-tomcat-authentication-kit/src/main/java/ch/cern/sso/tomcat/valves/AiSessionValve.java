@@ -1,30 +1,29 @@
 package ch.cern.sso.tomcat.valves;
 
 import ch.cern.sso.tomcat.aicookies.CookiesInspector;
-import ch.cern.sso.tomcat.loginas.LoginAsCookieFactory;
-import ch.cern.sso.tomcat.loginas.Authorizer;
-import ch.cern.sso.tomcat.exceptions.WrongAiLoginAsCookieFormatException;
 import ch.cern.sso.tomcat.common.aisession.AiSessionFactory;
 import ch.cern.sso.tomcat.common.cookies.AisCookieFactory;
-import ch.cern.sso.tomcat.common.utils.Constants;
-import ch.cern.sso.tomcat.common.utils.InitParamsUtils;
-import ch.cern.sso.tomcat.common.utils.MessagesKeys;
-import ch.cern.sso.tomcat.common.utils.PrincipalWrapper;
-import ch.cern.sso.tomcat.common.utils.SessionUtils;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
+import ch.cern.sso.tomcat.common.utils.*;
+import ch.cern.sso.tomcat.exceptions.WrongAiLoginAsCookieFormatException;
+import ch.cern.sso.tomcat.loginas.Authorizer;
+import ch.cern.sso.tomcat.loginas.LoginAsCookieFactory;
+import ch.cern.sso.tomcat.wrappers.CookieRequestWrapper;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.rmi.RemoteException;
+import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -68,8 +67,9 @@ public class AiSessionValve extends ValveBase {
                 Cookie loginAsCookie = this.loginAsCookieFactory.getLoginAsCookie(request.getCookies(), Constants.AI_LOGIN_AS, isLoginAsEnabled);
                 authorizer.autorizeLoginAs(this.groupsAllowed, loginAsCookie, principalWrapper, response, this.isLoginAsEnabled);
                 Cookie ai_session = createAiSessionCookie(request, principalWrapper, loginAsCookie);
-                // Inject ai_session in every request
-                request.addCookie(ai_session);
+
+                CookieRequestWrapper cookieRequestWrapper = new CookieRequestWrapper(request.getRequest(), Collections.singleton(ai_session));
+                request.setRequest(cookieRequestWrapper);
             }
             this.getNext().invoke(request, response);
         } catch (WrongAiLoginAsCookieFormatException

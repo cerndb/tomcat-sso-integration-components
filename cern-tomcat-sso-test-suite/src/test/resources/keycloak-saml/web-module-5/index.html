@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>Sample "Hello, World" Application</title>
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script>
+            $(document).on("click", "#somebutton", function () { // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+                $.get("http://localhost:8082/web-module-3/saml-session-info", function (responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
+                    $("#somediv").text(responseText);           // Locate HTML DOM element with ID "somediv" and set its text content with the response text.
+                });
+            });
+        </script>
+    </head>
+    <body bgcolor=white>
+        <table border="0">
+            <tr>
+                <td>
+                    <img src="http://localhost:8082/web-module-5/images/tomcat.gif">
+                </td>
+                <td>
+                    <h1>Sample "Hello, World" Application</h1>
+                    <p>This is the home page for a sample application used to illustrate the
+                        source directory organization of a web application utilizing the principles
+                        outlined in the Application Developer's Guide.
+                </td>
+            </tr>
+        </table>
+        <button id="somebutton">Request to different context</button>
+        <div id="somediv"></div>
+    </body>
+</html>

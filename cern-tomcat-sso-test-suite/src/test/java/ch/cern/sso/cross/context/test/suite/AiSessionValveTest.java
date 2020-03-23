@@ -5,14 +5,24 @@
  */
 package ch.cern.sso.cross.context.test.suite;
 
-import java.io.File;
-import java.util.Random;
+import ch.cern.sso.cross.context.test.suite.utils.Cookies.*;
+import ch.cern.sso.cross.context.test.suite.utils.HtmlUnitTestDriver;
+import ch.cern.sso.cross.context.test.suite.utils.Utils;
+import ch.cern.sso.tomcat.common.aisession.Credentials;
+import ch.cern.sso.tomcat.common.utils.Constants;
+import ch.cern.sso.tomcat.common.utils.SsoClaims;
+import ch.cern.sso.tomcat.valves.mocks.MockConstants;
 import org.apache.catalina.startup.Tomcat;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import org.keycloak.adapters.saml.SamlPrincipal;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import java.io.File;
+import java.rmi.RemoteException;
+
+import static junit.framework.TestCase.fail;
 
 /**
  *
@@ -20,18 +30,20 @@ import org.openqa.selenium.WebDriver;
  */
 public class AiSessionValveTest {
 
-    static final String APP_SERVER_BASE_URL = "http://localhost:8082";
-    static final String CONTEXT_PATH = "/web-module-3";
-    static final String CHECK_COOKIES_SERVLET_PATH = "/cookie-info";
-    static final String AI_SESSION_COOKIE_NAME = "AI_SESSION";
-    static final String BASE_CONF_RESOURCE_PATH = "/keycloak-saml/testsaml-with-mappers.json";
-    static final String CONTEXT_CONF_FOLDER = "web-module-3";
-    static final String INJECTED_AI_SESSION_VALUE = "14F70F544BFE0044270BCAFDC04514F12219959444455EB37B5D95BD42B7BDFFE65DEFFA3D394E2B2CB6F4FB05FC073E5D7637535D715C256BBCCF6377438A9062D0AA3406343D7149131F2209051642B8F8E25E8CEE5367788477D97C12F1EAA4CBCC57";
-    static final String NOT_FOUND_RESOURCE_FOR_COOKIE_INJECTION_TRICK = "/404";
-    static final String ROOT_PATH = "/";
+    private static final String APP_SERVER_BASE_URL = "http://localhost:8082";
+    private static final String CONTEXT_PATH = "/aisession-nologinas";
+    private static final String CHECK_COOKIES_SERVLET_PATH = "/cookie-info";
+    private static final String CHECK_REQUEST_SERVLET_PATH = "/request-info";
 
-    static Tomcat tomcat = null;
-    static WebDriver browser;
+    private static final String AI_SESSION_COOKIE_NAME = Constants.AI_SESSION;
+    private static final String BASE_CONF_RESOURCE_PATH = "/ai-session/aisession-nologinas";
+    private static final String CONTEXT_CONF_FOLDER = "aisession-nologinas";
+    private static final String NOT_FOUND_RESOURCE_FOR_COOKIE_INJECTION_TRICK = "/404";
+
+
+    private static Tomcat tomcat = null;
+    private static WebDriver browser;
+
 
     @BeforeClass
     public static void initTomcat() throws Exception {
@@ -56,37 +68,72 @@ public class AiSessionValveTest {
         d.getWebClient().getOptions().setCssEnabled(false);
         d.getWebClient().getOptions().setTimeout(1000000);
         browser = d;
+        browser.get(APP_SERVER_BASE_URL + CONTEXT_PATH + NOT_FOUND_RESOURCE_FOR_COOKIE_INJECTION_TRICK);
+    }
+    @After
+    public void closeBrowser(){
+        browser.close();
     }
 
     @Test
     public void testAiSessionIsAdded() {
         browser.get(APP_SERVER_BASE_URL + CONTEXT_PATH + CHECK_COOKIES_SERVLET_PATH);
         Utils.assertStringIsDisplayed(browser, AI_SESSION_COOKIE_NAME);
-        browser.close();
+        browser.get(APP_SERVER_BASE_URL + CONTEXT_PATH + CHECK_REQUEST_SERVLET_PATH);
+        Utils.assertStringIsDisplayed(browser, AI_SESSION_COOKIE_NAME);
+    }
+
+    @Test
+    public void testAiSessionContent(){
+        browser.get(APP_SERVER_BASE_URL + CONTEXT_PATH + CHECK_COOKIES_SERVLET_PATH);
+        try {
+            String aiSessionCookie = new CookieServletCookieRetriever(browser.getPageSource()).getCookies().get(AI_SESSION_COOKIE_NAME);
+            Credentials credentials = new Credentials(aiSessionCookie);
+            SamlPrincipal principal = MockConstants.createSamlPrincipal();
+            String language = principal.getAttribute(SsoClaims.SSO_CLAIM_PREFERRED_LANGUAGE).substring(0,1);
+            String hrId = principal.getAttribute(SsoClaims.SSO_CLAIM_PERSON_ID);
+            Assert.assertEquals("PreferredLanguage ", credentials.getPreferedLanguage(), language);
+            Assert.assertEquals("HrId ", Integer.toString(credentials.getHrId()), hrId);
+            Assert.assertEquals("LoginName ", credentials.getLoginName(), MockConstants.PRINCIPAL_NAME);
+
+        } catch (InstantiationException | CookieParsingException | RemoteException | DatatypeConfigurationException e) {
+            fail(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Test
     public void testInjectedAiSessionIsDropped() {
-        browser.get(APP_SERVER_BASE_URL + NOT_FOUND_RESOURCE_FOR_COOKIE_INJECTION_TRICK);
-        // Inject more than one
-        Random r = new Random();
-        String value_0 = INJECTED_AI_SESSION_VALUE + r.nextInt();
-        org.openqa.selenium.Cookie injected_ai_session_0 = new org.openqa.selenium.Cookie(AI_SESSION_COOKIE_NAME, value_0, CONTEXT_PATH);
-        browser.manage().addCookie(injected_ai_session_0);
-        String value_1 = INJECTED_AI_SESSION_VALUE + r.nextInt();
-        org.openqa.selenium.Cookie injected_ai_session_1 = new org.openqa.selenium.Cookie(AI_SESSION_COOKIE_NAME, value_1, ROOT_PATH);
-        browser.manage().addCookie(injected_ai_session_1);
+        //try spoofing ai_session cookie
+        browser.manage().addCookie(CookieFactory.createCookie(AI_SESSION_COOKIE_NAME));
         // Add other random cookies
-        for (int i = 0; i < 10; i++) {
-            String name = String.valueOf((char) (r.nextInt('z' - 'a') + 'a'));
-            String value = String.valueOf(r.nextInt());
-            org.openqa.selenium.Cookie injected_ai_session = new org.openqa.selenium.Cookie(name, value);
-            browser.manage().addCookie(injected_ai_session);
-        }
+        for (int i = 0; i < 10; i++)
+            browser.manage().addCookie(CookieFactory.createCookie());
+
+        Cookie aiSpoofedCookies = browser.manage().getCookieNamed(AI_SESSION_COOKIE_NAME);
         browser.get(APP_SERVER_BASE_URL + CONTEXT_PATH + CHECK_COOKIES_SERVLET_PATH);
-        Utils.assertStringIsNOTdisplayed(browser, value_0);
-        Utils.assertStringIsNOTdisplayed(browser, value_1);
-        browser.close();
+        CookieRetriever cookieRetriever = new CookieServletCookieRetriever(browser.getPageSource());
+        Utils.assertCookiesNotContain(new Cookie[]{aiSpoofedCookies},cookieRetriever);
+
+        browser.get(APP_SERVER_BASE_URL + CONTEXT_PATH + CHECK_REQUEST_SERVLET_PATH);
+        cookieRetriever = new RequestServletCookieRetriever(browser.getPageSource());
+        Utils.assertCookiesNotContain(new Cookie[]{aiSpoofedCookies},cookieRetriever);
+
+    }
+
+    @Test
+    public void testOtherCookiesAreNotDropped(){
+        //add random cookies
+        for (int i = 0; i < 10; i++)
+            browser.manage().addCookie(CookieFactory.createCookie());
+        Cookie[] randomCookies=browser.manage().getCookies().toArray(new Cookie[0]);
+        browser.manage().addCookie(CookieFactory.createCookie(AI_SESSION_COOKIE_NAME));
+
+        browser.get(APP_SERVER_BASE_URL + CONTEXT_PATH + CHECK_COOKIES_SERVLET_PATH);
+        Utils.assertCookiesContain(randomCookies, new CookieServletCookieRetriever(browser.getPageSource()));
+
+        browser.get(APP_SERVER_BASE_URL + CONTEXT_PATH + CHECK_REQUEST_SERVLET_PATH);
+        Utils.assertCookiesContain(randomCookies, new RequestServletCookieRetriever(browser.getPageSource()));
     }
 
 }

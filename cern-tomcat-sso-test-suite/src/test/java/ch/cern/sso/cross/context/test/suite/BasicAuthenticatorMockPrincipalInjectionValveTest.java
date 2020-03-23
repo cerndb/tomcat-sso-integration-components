@@ -5,6 +5,8 @@
  */
 package ch.cern.sso.cross.context.test.suite;
 
+import ch.cern.sso.cross.context.test.suite.utils.HtmlUnitTestDriver;
+import ch.cern.sso.cross.context.test.suite.utils.Utils;
 import ch.cern.sso.tomcat.valves.mocks.MockConstants;
 import java.io.File;
 import org.apache.catalina.startup.Tomcat;

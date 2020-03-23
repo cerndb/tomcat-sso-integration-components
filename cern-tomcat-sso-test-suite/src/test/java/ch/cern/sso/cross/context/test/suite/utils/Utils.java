@@ -3,13 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.cern.sso.cross.context.test.suite;
+package ch.cern.sso.cross.context.test.suite.utils;
 
-import static ch.cern.sso.cross.context.test.suite.SsoAisFilterTest.browser;
+import ch.cern.sso.cross.context.test.suite.utils.Cookies.CookieParsingException;
+import ch.cern.sso.cross.context.test.suite.utils.Cookies.CookieRetriever;
 import org.junit.Assert;
 import org.keycloak.testsuite.pages.LoginPage;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
+
+import java.util.Map;
 
 /**
  *
@@ -30,20 +34,28 @@ public class Utils {
         loginPage.login(username, password);
     }
 
-    public static void assertCookiesAreCreated(WebDriver browser, String[] cookies) {
-        String pageSource = browser.getPageSource();
-        String[] cookieValuePair = pageSource.split("\n");
-        for (String cookie : cookies) {
-            // Check that the name of the cookie is display
-            // Optional<String> cookieNameAndValue = Arrays.stream(cookieValuePair).filter(cvp -> cvp.contains(cookie)).findFirst();
-            // TODO: avoid java 8 or upper features, sigh...
-            String cookieNameAndValue = new String();
-            Assert.assertTrue("Cookie " + cookie + " has not been created.", cookieNameAndValue.isEmpty());
-            // Check the value is not empty
-            String value = cookieNameAndValue.split("-->")[1];
-            Assert.assertTrue("Cookie " + cookie + " value is empty", !value.isEmpty());
+    public static void assertCookiesContain(Cookie[] expectedCookies, CookieRetriever cookieRetriever){
+        assertCookiesValue(expectedCookies,cookieRetriever,true);
+    }
+    public static void assertCookiesNotContain(Cookie[] expectedCookies, CookieRetriever cookieRetriever){
+        assertCookiesValue(expectedCookies,cookieRetriever,false);
+    }
+    private static void assertCookiesValue(Cookie[] expectedCookies, CookieRetriever cookieRetriever, boolean contain){
+        Map<String,String> displayedCookies = null;
+        try {
+            displayedCookies = cookieRetriever.getCookies();
+        } catch (CookieParsingException e) {
+            e.printStackTrace();
+        }
+
+        for(Cookie expectedCookie : expectedCookies){
+            String cookieName = expectedCookie.getName();
+            String cookieValue = expectedCookie.getValue();
+            Assert.assertEquals("cookie: " + cookieName + " expected value: " + cookieValue + " actual value: " + displayedCookies.get(cookieName), contain, cookieValue.equalsIgnoreCase(displayedCookies.get(cookieName)));
         }
     }
+
+
 
     public static void assertStringIsDisplayed(WebDriver browser, String stringToDisplay) {
         String pageSource = browser.getPageSource();
@@ -57,10 +69,10 @@ public class Utils {
 
     public static void assertTitleEquals(WebDriver browser, String expectedTitle) {
         String title = browser.getTitle();
-        Assert.assertTrue(expectedTitle + " not equals to " + title, title.equals(expectedTitle));
+        Assert.assertEquals(expectedTitle + " not equals to " + title, title, expectedTitle);
     }
 
-    public static void testStringIsDisplayed(String url, String username, String password, String stringToDisplay) {
+    public static void testStringIsDisplayed(WebDriver browser, String url, String username, String password, String stringToDisplay) {
         browser.get(url);
         Utils.assertAtLoginPagePostBinding(browser);
         Utils.login(browser, username, password);

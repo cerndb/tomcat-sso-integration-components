@@ -14,6 +14,14 @@
         <servlet-name>CookieInfoServlet</servlet-name>
         <url-pattern>/cookie-info</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>RequestInfoServlet</servlet-name>
+        <servlet-class>ch.cern.examples.servlets.RequestInfoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RequestInfoServlet</servlet-name>
+        <url-pattern>/request-info</url-pattern>
+    </servlet-mapping>
     
     <security-constraint>
         <web-resource-collection>

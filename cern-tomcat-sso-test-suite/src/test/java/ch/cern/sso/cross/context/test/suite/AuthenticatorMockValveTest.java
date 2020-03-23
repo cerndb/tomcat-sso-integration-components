@@ -5,13 +5,17 @@
  */
 package ch.cern.sso.cross.context.test.suite;
 
-import java.io.File;
+import ch.cern.sso.cross.context.test.suite.utils.HtmlUnitTestDriver;
+import ch.cern.sso.cross.context.test.suite.utils.Utils;
+import ch.cern.sso.tomcat.valves.mocks.MockConstants;
 import org.apache.catalina.startup.Tomcat;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+
+import java.io.File;
 
 /**
  *
@@ -54,7 +58,7 @@ public class AuthenticatorMockValveTest {
     @Test
     public void testUserIsAuthenticated() {
         browser.get("http://localhost:8082/web-module-2/principal-info");
-        Utils.assertStringIsDisplayed(browser, "bob");
+        Utils.assertStringIsDisplayed(browser, MockConstants.PRINCIPAL_NAME);
         browser.close();
     }
 

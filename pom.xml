@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ch.cern.sso.sp.tomcat</groupId>
     <artifactId>tomcat-sso-integration-components</artifactId>
-    <version>2.0.12-SNAPSHOT</version>
+    <version>2.0.13-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>cern-tomcat-session-utils</module>
@@ -57,11 +57,13 @@
         <repository>
             <id>cern-jeedy-applications</id>
             <name>Releases</name>
+            <!--suppress UnresolvedMavenProperty -->
             <url>${repository.target.release.URL}</url>
         </repository>
         <snapshotRepository>
             <id>cern-jeedy-applications</id>
             <name>Snapshots</name>
+            <!--suppress UnresolvedMavenProperty -->
             <url>${repository.target.snapshot.URL}</url>
         </snapshotRepository>
     </distributionManagement>

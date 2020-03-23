@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.cern.sso.cross.context.test.suite;
+package ch.cern.sso.cross.context.test.suite.utils;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
 import org.apache.catalina.startup.Tomcat;
 
 /**

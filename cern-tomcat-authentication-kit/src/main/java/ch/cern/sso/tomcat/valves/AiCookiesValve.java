@@ -2,27 +2,27 @@ package ch.cern.sso.tomcat.valves;
 
 import ch.cern.sso.tomcat.aicookies.CookiesInspector;
 import ch.cern.sso.tomcat.common.cookies.AisCookieFactory;
-import ch.cern.sso.tomcat.common.utils.Constants;
-import ch.cern.sso.tomcat.common.exceptions.HeaderInjectionException;
-import ch.cern.sso.tomcat.common.utils.InitParamsUtils;
-import ch.cern.sso.tomcat.common.utils.MessagesKeys;
-import ch.cern.sso.tomcat.common.utils.PrincipalWrapper;
-import ch.cern.sso.tomcat.common.utils.SessionUtils;
+import ch.cern.sso.tomcat.common.utils.*;
 import ch.cern.sso.tomcat.exceptions.WrongAiLoginAsCookieFormatException;
 import ch.cern.sso.tomcat.loginas.Authorizer;
 import ch.cern.sso.tomcat.loginas.LoginAsCookieFactory;
-import java.io.IOException;
-import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
+import ch.cern.sso.tomcat.wrappers.CookieRequestWrapper;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.rmi.RemoteException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -36,10 +36,12 @@ public class AiCookiesValve extends ValveBase {
     private InitParamsUtils initParamsUtils;
     private AisCookieFactory aisCookieFactory;
     private LoginAsCookieFactory loginAsCookieFactory;
+    private CookieRequestWrapper cookieRequestWrapper;
     private boolean isCookiesUpperCase = false;
     private boolean isLoginAsEnabled = false;
     private Authorizer authorizer;
     private String[] groupsAllowed;
+    private Set<Cookie> cookiesToInject;
 
     @Override
     protected void initInternal() throws LifecycleException {
@@ -55,19 +57,16 @@ public class AiCookiesValve extends ValveBase {
     public void invoke(Request request, Response response) throws IOException, ServletException {
         try {
             initValveParameters(request);
-            if (request.getUserPrincipal() != null) {
+            Set<String> cookiesToDrop =  new HashSet<>(Arrays.asList(this.aiCookieNames));
+            if(request.getUserPrincipal() != null){
                 PrincipalWrapper principalWrapper = new PrincipalWrapper(request.getUserPrincipal());
-                // Be sure these cookies are not injected from the client
-                for (String cookieName : this.aiCookieNames) {
-                    Cookie cookieToDrop = new Cookie(cookieName, "");
-                    this.cookiesInspector.dropCookie(request, cookieToDrop);
-                }
-                // Get the loginAsCookie and check if the user has rights to inject it in the request
                 Cookie loginAsCookie = this.loginAsCookieFactory.getLoginAsCookie(request.getCookies(), Constants.AI_LOGIN_AS, isLoginAsEnabled);
                 this.authorizer.autorizeLoginAs(this.groupsAllowed, loginAsCookie, principalWrapper, response, this.isLoginAsEnabled);
-                Cookie[] aicookies = aisCookieFactory.getCookies(this.aiCookieNames, principalWrapper, this.isCookiesUpperCase, this.isLoginAsEnabled, loginAsCookie);
-                addCookiesToRequest(aicookies, request);
+                Cookie[] aiCookies = aisCookieFactory.getCookies(this.aiCookieNames, principalWrapper, this.isCookiesUpperCase, this.isLoginAsEnabled, loginAsCookie);
+                this.cookiesToInject = new HashSet<>(Arrays.asList(aiCookies));
             }
+            cookieRequestWrapper = new CookieRequestWrapper(request.getRequest(),this.cookiesToInject,cookiesToDrop);
+            request.setRequest(cookieRequestWrapper);
             getNext().invoke(request, response);
         } catch (RemoteException
                 | WrongAiLoginAsCookieFormatException ex) {
@@ -76,11 +75,6 @@ public class AiCookiesValve extends ValveBase {
         }
     }
 
-    private void addCookiesToRequest(Cookie[] aicookies, Request request) {
-        for (Cookie cookie : aicookies) {
-            request.addCookie(cookie);
-        }
-    }
 
     private void initValveParameters(Request request) throws ServletException {
         ServletContext servletContext = request.getServletContext();
