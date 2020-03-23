@@ -5,14 +5,16 @@
  */
 package ch.cern.sso.cross.context.test.suite;
 
-import java.util.HashMap;
+import ch.cern.sso.cross.context.test.suite.utils.InitTestEnvironment;
+import ch.cern.sso.cross.context.test.suite.utils.Utils;
 import org.apache.catalina.startup.Tomcat;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
+
+import java.util.HashMap;
 
 /**
  *
@@ -20,8 +22,8 @@ import org.openqa.selenium.WebDriver;
  */
 public class SsoAisFilterTest {
 
-    static Tomcat tomcat = null;
-    static WebDriver browser;
+    private static Tomcat tomcat = null;
+    private static WebDriver browser;
     static String[] cookies = {"AI_USERNAME", "AI_USER", "AI_IDENTITY_CLASS", "AI_LANG", "AI_SESSION", "AI_HRID"};
     private String username;
     private String password;
@@ -56,35 +58,35 @@ public class SsoAisFilterTest {
     }
 
     //@Test
-    public void testAisCookiesAreCreated() {
-        initTestParameters("http://localhost:8082/web-module-1/cookie-info", "lurodrig", "password");
-        browser.get(url);
-        Utils.assertAtLoginPagePostBinding(browser);
-        Utils.login(browser, username, password);
-        Utils.assertAtModuleContextStartsWith(browser, "/web-module-1");
-        Utils.assertCookiesAreCreated(browser, cookies);
-        browser.close();
-    }
+//    public void testAisCookiesAreCreated() {
+//        initTestParameters("http://localhost:8082/web-module-1/cookie-info", "lurodrig", "password");
+//        browser.get(url);
+//        Utils.assertAtLoginPagePostBinding(browser);
+//        Utils.login(browser, username, password);
+//        Utils.assertAtModuleContextStartsWith(browser, "/web-module-1");
+//        Utils.assertCookiesAreCreated(browser, cookies);
+//        browser.close();
+//    }
 
     //@Test
     public void testAuthorizedUserCanAccess() {
         initTestParameters("http://localhost:8082/web-module-1/principal-info", "lurodrig", "password");
         String stringToDisplay = "Name: " + username;
-        Utils.testStringIsDisplayed(url, username, password, stringToDisplay);
+        Utils.testStringIsDisplayed(browser, url, username, password, stringToDisplay);
     }
 
     //@Test
     public void testNonAuthorizedUserCanNotAccess() {
         initTestParameters("http://localhost:8082/web-module-1/principal-info", "bburke", "password");
         String stringToDisplay = "HTTP Status 403 - User " + username + " is NOT member of any of the ALLOWED groups";
-        Utils.testStringIsDisplayed(url, username, password, stringToDisplay);
+        Utils.testStringIsDisplayed(browser, url, username, password, stringToDisplay);
     }
 
     //@Test
     public void testForbiddenUserCanNotAccess() {
         initTestParameters("http://localhost:8082/web-module-1/principal-info", "bgates", "password");
         String stringToDisplay = "HTTP Status 403 - User " + username + " is member of these FORBIDDEN groups:";
-        Utils.testStringIsDisplayed(url, username, password, stringToDisplay);
+        Utils.testStringIsDisplayed(browser, url, username, password, stringToDisplay);
     }
 
     //@Test
@@ -112,6 +114,6 @@ public class SsoAisFilterTest {
         Cookie cookie = new Cookie("AI_LOGIN_AS", "awiecek:493034:e");
         browser.manage().addCookie(cookie);
         String stringToDisplay = "HTTP Status 403 - User " + username + " is trying to inject the LOGIN AS COOKIE. This incident will be reported";
-        Utils.testStringIsDisplayed(url, username, password, stringToDisplay);
+        Utils.testStringIsDisplayed(browser, url, username, password, stringToDisplay);
     }
 }

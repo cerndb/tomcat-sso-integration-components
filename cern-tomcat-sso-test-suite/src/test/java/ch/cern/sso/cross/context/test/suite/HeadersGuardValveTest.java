@@ -5,6 +5,8 @@
  */
 package ch.cern.sso.cross.context.test.suite;
 
+import ch.cern.sso.cross.context.test.suite.utils.HtmlUnitTestDriver;
+import ch.cern.sso.cross.context.test.suite.utils.Utils;
 import org.apache.catalina.startup.Tomcat;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -29,16 +31,16 @@ public class HeadersGuardValveTest {
     public static void initTomcat() throws Exception {
         tomcat = new Tomcat();
         tomcat.setPort(8082);
-        File base = new File(HeadersGuardValveTest.class.getResource("/header-guard/web-module-0")
+        File base = new File(HeadersGuardValveTest.class.getResource("/header-guard/no-guarded-headers-module")
                 .getFile()).getParentFile();
-        tomcat.addWebapp("/web-module-0",
-                new File(base, "web-module-0")
+        tomcat.addWebapp("/no-guarded-headers-module",
+                new File(base, "no-guarded-headers-module")
                         .toString());//    <Parameter name="guarded.headers" value=""/>
-        tomcat.addWebapp("/web-module-1",
-                new File(base, "web-module-1")
+        tomcat.addWebapp("/single-guarder-header-module",
+                new File(base, "single-guarder-header-module")
                         .toString());//    <Parameter name="guarded.headers" value="SSO_REMOTE_USER"/>
-        tomcat.addWebapp("/web-module-2",
-                new File(base, "/web-module-2")
+        tomcat.addWebapp("/multiple-guarded-headers-module",
+                new File(base, "/multiple-guarded-headers-module")
                         .toString());//    <Parameter name="guarded.headers" value="SSO_REMOTE_USER,REMOTE_USER,REMOTE_HOST"/>
 
         tomcat.start();
@@ -61,11 +63,19 @@ public class HeadersGuardValveTest {
         for(Map.Entry<String,String> header : headers.entrySet())
             d.getWebClient().addRequestHeader(header.getKey(), header.getValue());
     }
-    private Map<String,String> getHeadersToSpoof(String[] headerNames){
+    private Map<String,String> getHeadersToSpoof(String[] headerNames, String[] headerValues){
         Map<String,String> headersToSpoof = new HashMap<>();
-        for (String header : headerNames)
-            headersToSpoof.put(header, SPOOFED_HEADER_VALUE);
+        if(headerNames == null)
+            return headersToSpoof;
+        if(headerValues == null)
+            headerValues = new String[]{};
+        for(int i=0; i<headerNames.length; i++)
+            headersToSpoof.put(headerNames[i], i < headerValues.length ? headerValues[i] : SPOOFED_HEADER_VALUE);
+
         return headersToSpoof;
+    }
+    private Map<String,String> getHeadersToSpoof(String[] headerNames){
+        return getHeadersToSpoof(headerNames,new String[]{});
     }
 
     @Test
@@ -74,7 +84,7 @@ public class HeadersGuardValveTest {
         Map<String,String> headersToSpoof = getHeadersToSpoof(spoofHeaderNames);
         HtmlUnitTestDriver browser = getBrowser();
         addHeaders(browser, headersToSpoof);
-        browser.get("http://localhost:8082/web-module-1/request-info");
+        browser.get("http://localhost:8082/single-guarder-header-module/request-info");
 
         Utils.assertStringIsNOTdisplayed(browser, SPOOFED_HEADER_VALUE);
 
@@ -82,8 +92,7 @@ public class HeadersGuardValveTest {
                 "REMOTE_USER", "REMOTE_HOST", "REMOTE_USeR"};
         headersToSpoof = getHeadersToSpoof(spoofHeaderNames);
         addHeaders(browser, headersToSpoof);
-        browser.get("http://localhost:8082/web-module-1/request-info");
-        System.out.println(browser.getPageSource());
+        browser.get("http://localhost:8082/single-guarder-header-module/request-info");
 
         Utils.assertStringIsDisplayed(browser, SPOOFED_HEADER_VALUE);
 
@@ -98,7 +107,7 @@ public class HeadersGuardValveTest {
         Map<String,String> headersToSpoof = getHeadersToSpoof(spoofHeaderNames);
         HtmlUnitTestDriver browser = getBrowser();
         addHeaders(browser, headersToSpoof);
-        browser.get("http://localhost:8082/web-module-1/request-info");
+        browser.get("http://localhost:8082/single-guarder-header-module/request-info");
 
         Utils.assertStringIsNOTdisplayed(browser, SPOOFED_HEADER_VALUE);
         browser.close();
@@ -109,7 +118,7 @@ public class HeadersGuardValveTest {
         Map<String,String> headersToSpoof = getHeadersToSpoof(spoofHeaderNames);
         HtmlUnitTestDriver browser = getBrowser();
         addHeaders(browser, headersToSpoof);
-        browser.get("http://localhost:8082/web-module-1/request-info");
+        browser.get("http://localhost:8082/single-guarder-header-module/request-info");
 
         Utils.assertStringIsNOTdisplayed(browser, SPOOFED_HEADER_VALUE);
         browser.close();
@@ -121,7 +130,7 @@ public class HeadersGuardValveTest {
         Map<String,String> headersToSpoof = getHeadersToSpoof(spoofHeaderNames);
         HtmlUnitTestDriver browser = getBrowser();
         addHeaders(browser, headersToSpoof);
-        browser.get("http://localhost:8082/web-module-2/request-info");
+        browser.get("http://localhost:8082/multiple-guarder-headers-module/request-info");
 
         Utils.assertStringIsNOTdisplayed(browser, SPOOFED_HEADER_VALUE);
         browser.close();
@@ -132,7 +141,7 @@ public class HeadersGuardValveTest {
         Map<String,String> headersToSpoof = getHeadersToSpoof(spoofHeaderNames);
         HtmlUnitTestDriver browser = getBrowser();
         addHeaders(browser, headersToSpoof);
-        browser.get("http://localhost:8082/web-module-2/request-info");
+        browser.get("http://localhost:8082/multiple-guarder-headers-module/request-info");
 
         Utils.assertStringIsNOTdisplayed(browser, SPOOFED_HEADER_VALUE);
         browser.close();
@@ -143,7 +152,7 @@ public class HeadersGuardValveTest {
         Map<String,String> headersToSpoof = getHeadersToSpoof(spoofHeaderNames);
         HtmlUnitTestDriver browser = getBrowser();
         addHeaders(browser, headersToSpoof);
-        browser.get("http://localhost:8082/web-module-2/request-info");
+        browser.get("http://localhost:8082/multiple-guarder-headers-module/request-info");
 
         Utils.assertStringIsNOTdisplayed(browser, SPOOFED_HEADER_VALUE);
         browser.close();
@@ -155,7 +164,7 @@ public class HeadersGuardValveTest {
         Map<String,String> headersToSpoof = getHeadersToSpoof(spoofHeaderNames);
         HtmlUnitTestDriver browser = getBrowser();
         addHeaders(browser, headersToSpoof);
-        browser.get("http://localhost:8082/web-module-0/request-info");
+        browser.get("http://localhost:8082/no-guarded-headers-module/request-info");
         Utils.assertStringIsDisplayed(browser, SPOOFED_HEADER_VALUE);
         browser.close();
     }
@@ -165,7 +174,7 @@ public class HeadersGuardValveTest {
         Map<String,String> headersToSpoof = getHeadersToSpoof(spoofHeaderNames);
         HtmlUnitTestDriver browser = getBrowser();
         addHeaders(browser, headersToSpoof);
-        browser.get("http://localhost:8082/web-module-0/request-info");
+        browser.get("http://localhost:8082/no-guarded-headers-module/request-info");
 
         Utils.assertStringIsDisplayed(browser, SPOOFED_HEADER_VALUE);
         browser.close();
@@ -176,7 +185,7 @@ public class HeadersGuardValveTest {
         Map<String,String> headersToSpoof = getHeadersToSpoof(spoofHeaderNames);
         HtmlUnitTestDriver browser = getBrowser();
         addHeaders(browser, headersToSpoof);
-        browser.get("http://localhost:8082/web-module-0/request-info");
+        browser.get("http://localhost:8082/no-guarded-headers-module/request-info");
 
         Utils.assertStringIsNOTdisplayed(browser, SPOOFED_HEADER_VALUE);
         browser.close();

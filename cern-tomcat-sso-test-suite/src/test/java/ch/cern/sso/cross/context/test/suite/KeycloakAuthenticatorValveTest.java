@@ -6,12 +6,14 @@
 package ch.cern.sso.cross.context.test.suite;
 
 import java.io.File;
+
+import ch.cern.sso.cross.context.test.suite.utils.HtmlUnitTestDriver;
+import ch.cern.sso.cross.context.test.suite.utils.Utils;
 import org.apache.catalina.startup.Tomcat;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 

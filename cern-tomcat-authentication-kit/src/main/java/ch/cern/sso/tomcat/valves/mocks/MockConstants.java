@@ -1,18 +1,13 @@
 package ch.cern.sso.tomcat.valves.mocks;
 
 import ch.cern.sso.tomcat.common.utils.SsoClaims;
-import java.security.Principal;
-import java.util.Arrays;
-import java.util.List;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import org.apache.catalina.connector.Request;
-import org.apache.catalina.realm.GenericPrincipal;
 import org.keycloak.adapters.saml.SamlPrincipal;
 import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.dom.saml.v2.assertion.AssertionType;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  *
@@ -27,28 +22,49 @@ public class MockConstants {
     public static final String PRINCIPAL_ROLES = "Roles";
     public static final String PRINCIPAL_NAME = "bob";
     public static final String PRINCIPAL_PASSWORD = "";
+    public static final String SSO_CLAIM_UPN = "luis.rodriguez.fernandez@cern.ch";
+    public static final String SSO_CLAIM_PERSON_ID = "720335";
+    public static final String SSO_CLAIM_EMAIL_ADRESS = "luis.rodriguez.fernandez@cern.ch";
+    public static final String SSO_CLAIM_AUTH_LEVEL = "Normal";
+    public static final String SSO_CLAIM_PREFERRED_LANGUAGE = "FR";
+    public static final String SSO_CLAIM_IDENTITY_CLASS = "CERN Registered";
+    public static final String SSO_CLAIM_2005_UPN = "luis.rodriguez.fernandez@cern.ch";
+    public static final String SSO_CLAIM_MOBILE_NUMBER = "+41754110558";
+    public static final String SSO_CLAIM_PHONE_NUMBER = "+4122767354";
+    public static final String SSO_CLAIM_FIRST_NAME = "Luis";
+    public static final String SSO_CLAIM_UID_NUMBER = "14825";
+    public static final String SSO_CLAIM_HOME_INSTITUTE = "CERN";
+    public static final String SSO_CLAIM_GID_NUMBER = "2763";
+    public static final String SSO_CLAIM_LAST_NAME = "Rodriguez Fernandez";
+    public static final String SSO_CLAIM_DEPARTMENT = "IT/DB";
+    public static final String SSO_CLAIM_BUILDING = "31 3-024";
+    public static final String SSO_CLAIM_COMMON_NAME = "lurodrig";
+    public static final String SSO_CLAIM_ROLE = "CERN Users";
+    public static final String SSO_CLAIM_FEDERATION = "CERN";
+
+
 
     public static void initSamlPrincipalAttributes(MultivaluedHashMap<String, String> attributes) {
-        attributes.add(SsoClaims.SSO_CLAIM_UPN, "luis.rodriguez.fernandez@cern.ch");
-        attributes.add(SsoClaims.SSO_CLAIM_PERSON_ID, "720335");
-        attributes.add(SsoClaims.SSO_CLAIM_EMAIL_ADRESS, "luis.rodriguez.fernandez@cern.ch");
-        attributes.add(SsoClaims.SSO_CLAIM_AUTH_LEVEL, "Normal");
-        attributes.add(SsoClaims.SSO_CLAIM_PREFERRED_LANGUAGE, "FR");
-        attributes.add(SsoClaims.SSO_CLAIM_IDENTITY_CLASS, "CERN Registered");
+        attributes.add(SsoClaims.SSO_CLAIM_UPN, SSO_CLAIM_UPN);
+        attributes.add(SsoClaims.SSO_CLAIM_PERSON_ID, SSO_CLAIM_PERSON_ID);
+        attributes.add(SsoClaims.SSO_CLAIM_EMAIL_ADRESS, SSO_CLAIM_EMAIL_ADRESS);
+        attributes.add(SsoClaims.SSO_CLAIM_AUTH_LEVEL, SSO_CLAIM_AUTH_LEVEL);
+        attributes.add(SsoClaims.SSO_CLAIM_PREFERRED_LANGUAGE, SSO_CLAIM_PREFERRED_LANGUAGE);
+        attributes.add(SsoClaims.SSO_CLAIM_IDENTITY_CLASS, SSO_CLAIM_IDENTITY_CLASS);
         attributes.addAll(PRINCIPAL_ROLES, ROLES);
-        attributes.add(SsoClaims.SSO_CLAIM_2005_UPN, "luis.rodriguez.fernandez@cern.ch");
-        attributes.add(SsoClaims.SSO_CLAIM_MOBILE_NUMBER, "+41754110558");
-        attributes.add(SsoClaims.SSO_CLAIM_PHONE_NUMBER, "+4122767354");
-        attributes.add(SsoClaims.SSO_CLAIM_FIRST_NAME, "Luis");
-        attributes.add(SsoClaims.SSO_CLAIM_UID_NUMBER, "14825");
-        attributes.add(SsoClaims.SSO_CLAIM_HOME_INSTITUTE, "CERN");
-        attributes.add(SsoClaims.SSO_CLAIM_GID_NUMBER, "2763");
-        attributes.add(SsoClaims.SSO_CLAIM_LAST_NAME, "Rodriguez Fernandez");
-        attributes.add(SsoClaims.SSO_CLAIM_DEPARTMENT, "IT/DB");
-        attributes.add(SsoClaims.SSO_CLAIM_BUILDING, "31 3-024");
-        attributes.add(SsoClaims.SSO_CLAIM_COMMON_NAME, "lurodrig");
-        attributes.add(SsoClaims.SSO_CLAIM_ROLE, "CERN Users");
-        attributes.add(SsoClaims.SSO_CLAIM_FEDERATION, "CERN");
+        attributes.add(SsoClaims.SSO_CLAIM_2005_UPN, SSO_CLAIM_2005_UPN);
+        attributes.add(SsoClaims.SSO_CLAIM_MOBILE_NUMBER, SSO_CLAIM_MOBILE_NUMBER);
+        attributes.add(SsoClaims.SSO_CLAIM_PHONE_NUMBER, SSO_CLAIM_PHONE_NUMBER);
+        attributes.add(SsoClaims.SSO_CLAIM_FIRST_NAME, SSO_CLAIM_FIRST_NAME);
+        attributes.add(SsoClaims.SSO_CLAIM_UID_NUMBER, SSO_CLAIM_UID_NUMBER);
+        attributes.add(SsoClaims.SSO_CLAIM_HOME_INSTITUTE, SSO_CLAIM_HOME_INSTITUTE);
+        attributes.add(SsoClaims.SSO_CLAIM_GID_NUMBER, SSO_CLAIM_GID_NUMBER);
+        attributes.add(SsoClaims.SSO_CLAIM_LAST_NAME, SSO_CLAIM_LAST_NAME);
+        attributes.add(SsoClaims.SSO_CLAIM_DEPARTMENT, SSO_CLAIM_DEPARTMENT);
+        attributes.add(SsoClaims.SSO_CLAIM_BUILDING, SSO_CLAIM_BUILDING);
+        attributes.add(SsoClaims.SSO_CLAIM_COMMON_NAME, SSO_CLAIM_COMMON_NAME);
+        attributes.add(SsoClaims.SSO_CLAIM_ROLE, SSO_CLAIM_ROLE);
+        attributes.add(SsoClaims.SSO_CLAIM_FEDERATION, SSO_CLAIM_FEDERATION);
     }
 
     public static SamlPrincipal createSamlPrincipal() throws DatatypeConfigurationException {

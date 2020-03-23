@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.cern.sso.cross.context.test.suite;
+package ch.cern.sso.cross.context.test.suite.utils;
 
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import ch.cern.sso.cross.context.test.suite.KeycloakAuthenticatorValveTest;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
 

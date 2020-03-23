@@ -33,7 +33,7 @@ public class OrdsBasicAuthValve extends BasicAuthenticator {
         for(String role : roles)
             if(hasRolePrefix(role, ROLE_PREFIX))
                 filteredRoles.add(role);
-        return filteredRoles.toArray(new String[filteredRoles.size()]);
+        return filteredRoles.toArray(new String[0]);
     }
     private boolean hasRolePrefix(String role, String prefix){
         return role.indexOf(prefix) == 0;

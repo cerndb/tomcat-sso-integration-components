@@ -6,12 +6,13 @@
 package ch.cern.sso.tomcat.common.utils;
 
 import ch.cern.sso.tomcat.common.cookies.CookieNameComparator;
+
+import javax.servlet.http.Cookie;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.servlet.http.Cookie;
 
 /**
  * Utility class for array manipulations
@@ -63,7 +64,7 @@ public class ArrayManipulator {
         Set<String> s1 = new HashSet<>(l1);
         Set<String> s2 = new HashSet<>(l2);
         s1.retainAll(s2);
-        return s1.toArray(new String[s1.size()]);
+        return s1.toArray(new String[0]);
     }
 
     /**
@@ -78,7 +79,7 @@ public class ArrayManipulator {
         Set<String> s1 = new HashSet<>(Arrays.asList(a));
         Set<String> s2 = new HashSet<>(Arrays.asList(b));
         s1.retainAll(s2);
-        return s1.toArray(new String[s1.size()]);
+        return s1.toArray(new String[0]);
     }
 
     /**
@@ -109,12 +110,13 @@ public class ArrayManipulator {
      * @return
      */
     public static String join(String delimiter, String[] array) {
-        String result = "", prefix = "";
+        StringBuilder result = new StringBuilder();
+        String prefix = "";
         for (String s : array) {
-            result += prefix + s;
+            result.append(prefix).append(s);
             prefix = delimiter;
         }
-        return result;
+        return result.toString();
     }
     
      // From https://www.geeksforgeeks.org/remove-an-element-at-specific-index-from-an-array-in-java/ 

@@ -23,23 +23,24 @@ public class AisCookieFactory {
     private final static Logger LOGGER = Logger.getLogger(AisCookieFactory.class.getName());
 
     public Cookie[] getCookies(String[] aiCookiesArray, PrincipalWrapper principalWrapper, boolean isCookiesUpperCase, boolean isLoginAsEnabled, Cookie loginAsCookie) {
-        // If loginAs is enable and its cookie is present we have to add 3 "extra cookies"
-        List<String> aiCookieNames = new ArrayList<String>(Arrays.asList(aiCookiesArray));
-        int aisCookiesLength = aiCookieNames.size();
+        List<String> aiCookieNames = new ArrayList<>(Arrays.asList(aiCookiesArray));
         if (isLoginAsEnabled && loginAsCookie != null) {
-            aisCookiesLength = aisCookiesLength + 3;
-            // Extend the aicookies array with the extra "original" ones
-            aiCookieNames.add(Constants.ORIGINAL_AI_USERNAME_COOKIE);
-            aiCookieNames.add(Constants.ORIGINAL_AI_USER_COOKIE);
-            aiCookieNames.add(Constants.ORIGINAL_AI_HRID_COOKIE);
-            aiCookieNames.add(Constants.ORIGINAL_AI_LANG_COOKIE);
+            aiCookieNames.addAll(getOriginalAiCookieNames());
         }
 
-        List<Cookie> aicookies = new ArrayList<Cookie>(aisCookiesLength);
+        List<Cookie> aicookies = new ArrayList<>(aiCookieNames.size());
         for (String aiCookieName : aiCookieNames) {
             aicookies.add(this.getCookie(aiCookieName, principalWrapper, isCookiesUpperCase, isLoginAsEnabled, loginAsCookie));
         }
-        return aicookies.toArray(new Cookie[aisCookiesLength]);
+        return aicookies.toArray(new Cookie[0]);
+    }
+    public List<String> getOriginalAiCookieNames(){
+        List<String> aiCookieNames = new ArrayList<>(4);
+        aiCookieNames.add(Constants.ORIGINAL_AI_USERNAME_COOKIE);
+        aiCookieNames.add(Constants.ORIGINAL_AI_USER_COOKIE);
+        aiCookieNames.add(Constants.ORIGINAL_AI_HRID_COOKIE);
+        aiCookieNames.add(Constants.ORIGINAL_AI_LANG_COOKIE);
+        return aiCookieNames;
     }
 
     public Cookie getCookie(String cookieName, PrincipalWrapper principalWrapper, boolean isCookiesUpperCase, boolean isLoginAsEnabled, Cookie loginAsCookie) {

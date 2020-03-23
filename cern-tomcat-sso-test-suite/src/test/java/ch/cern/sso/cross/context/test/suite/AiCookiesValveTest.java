@@ -5,17 +5,20 @@
  */
 package ch.cern.sso.cross.context.test.suite;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import ch.cern.sso.cross.context.test.suite.utils.Cookies.CookieFactory;
+import ch.cern.sso.cross.context.test.suite.utils.Cookies.CookieRetriever;
+import ch.cern.sso.cross.context.test.suite.utils.Cookies.CookieServletCookieRetriever;
+import ch.cern.sso.cross.context.test.suite.utils.Cookies.RequestServletCookieRetriever;
+import ch.cern.sso.cross.context.test.suite.utils.HtmlUnitTestDriver;
+import ch.cern.sso.cross.context.test.suite.utils.Utils;
+import ch.cern.sso.tomcat.common.utils.Constants;
+import ch.cern.sso.tomcat.valves.mocks.MockConstants;
 import org.apache.catalina.startup.Tomcat;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
+
+import java.io.File;
 
 /**
  *
@@ -23,18 +26,23 @@ import org.openqa.selenium.WebDriver;
  */
 public class AiCookiesValveTest {
 
-    static final String APP_SERVER_BASE_URL = "http://localhost:8082";
-    static final String CONTEXT_PATH = "/web-module-4";
-    static final String CHECK_COOKIES_SERVLET_PATH = "/cookie-info";
-    static final String AI_SESSION_COOKIE_NAME = "AI_SESSION";
-    static final String BASE_CONF_RESOURCE_PATH = "/keycloak-saml/testsaml-with-mappers.json";
-    static final String CONTEXT_CONF_FOLDER = "web-module-4";
-    static final String NOT_FOUND_RESOURCE_FOR_COOKIE_INJECTION_TRICK = "/404";
-    static final String ROOT_PATH = "/";
-    static final String[] aiCookieNames = {"AI_USERNAME", "AI_USER", "AI_IDENTITY_CLASS", "AI_LANG", "AI_HRID"};
+    private static final String APP_SERVER_BASE_URL = "http://localhost:8082";
+    private static final String CONTEXT_PATH = "/aicookies-nologinas";
+    private static final String CHECK_COOKIES_SERVLET_PATH = "/cookie-info";
+    private static final String CHECK_REQUEST_SERVLET_PATH = "/request-info";
+    private static final String BASE_CONF_RESOURCE_PATH = "/ai-cookies/aicookies-loginas";
+    private static final String CONTEXT_CONF_FOLDER = "aicookies-nologinas";
+    private static final String NOT_FOUND_RESOURCE_FOR_COOKIE_INJECTION_TRICK = "/404";
+    private static final Cookie[] expectedCookies = {
+            new Cookie(Constants.AI_USERNAME, MockConstants.PRINCIPAL_NAME),
+            new Cookie(Constants.AI_USER, MockConstants.PRINCIPAL_NAME),
+            new Cookie(Constants.AI_IDENTITY_CLASS, MockConstants.SSO_CLAIM_IDENTITY_CLASS),
+            new Cookie(Constants.AI_LANG, MockConstants.SSO_CLAIM_PREFERRED_LANGUAGE.substring(0,1)),
+            new Cookie(Constants.AI_HRID, MockConstants.SSO_CLAIM_PERSON_ID)
+    };
 
-    static Tomcat tomcat = null;
-    static WebDriver browser;
+    private static Tomcat tomcat = null;
+    private static WebDriver browser;
 
     @BeforeClass
     public static void initTomcat() throws Exception {
@@ -59,35 +67,53 @@ public class AiCookiesValveTest {
         d.getWebClient().getOptions().setCssEnabled(false);
         d.getWebClient().getOptions().setTimeout(1000000);
         browser = d;
-
+        browser.get(APP_SERVER_BASE_URL + NOT_FOUND_RESOURCE_FOR_COOKIE_INJECTION_TRICK);// You first have to navigate to some page before setting cookies
     }
+
+    @After
+    public void closeBrowser(){
+        browser.close();
+    }
+
 
     @Test
     public void testAiCookiesAreAdded() {
+
+
         browser.get(APP_SERVER_BASE_URL + CONTEXT_PATH + CHECK_COOKIES_SERVLET_PATH);
-        for (String cookieName : aiCookieNames) {
-            Utils.assertStringIsDisplayed(browser, cookieName);
-        }
-        browser.close();
+        CookieRetriever cookieRetriever = new CookieServletCookieRetriever(browser.getPageSource());
+        Utils.assertCookiesContain(expectedCookies, cookieRetriever);
+
+        browser.get(APP_SERVER_BASE_URL + CONTEXT_PATH + CHECK_REQUEST_SERVLET_PATH);
+        cookieRetriever = new RequestServletCookieRetriever(browser.getPageSource());
+        Utils.assertCookiesContain(expectedCookies, cookieRetriever);
     }
 
     @Test
     public void testInjectedAiCookiesAreDropped() {
-        browser.get(APP_SERVER_BASE_URL + NOT_FOUND_RESOURCE_FOR_COOKIE_INJECTION_TRICK);
-        // Inject more than one
-        Random r = new Random();
-        List<String> values = new ArrayList<String>();
-        for (String cookieName : aiCookieNames) {
-            String value = String.valueOf(r.nextInt());
-            org.openqa.selenium.Cookie injected = new org.openqa.selenium.Cookie(cookieName, value);
-            values.add(value);
-            browser.manage().addCookie(injected);
-        }
+
+        for (Cookie cookie : expectedCookies)
+            browser.manage().addCookie(CookieFactory.createCookie(cookie.getName()));
+        Cookie[] spoofedCookies = browser.manage().getCookies().toArray(new Cookie[0]);
+
         browser.get(APP_SERVER_BASE_URL + CONTEXT_PATH + CHECK_COOKIES_SERVLET_PATH);
-         for (String value : values) {
-            Utils.assertStringIsNOTdisplayed(browser, value);
-        }
-        browser.close();
+        Utils.assertCookiesNotContain(spoofedCookies,new CookieServletCookieRetriever(browser.getPageSource()));
+
+        browser.get(APP_SERVER_BASE_URL + CONTEXT_PATH + CHECK_REQUEST_SERVLET_PATH);
+        Utils.assertCookiesNotContain(spoofedCookies,new RequestServletCookieRetriever(browser.getPageSource()));
+    }
+
+    @Test
+    public void testOtherCookiesAreNotDropped() {
+        for (int i=0;i<5;i++)
+            browser.manage().addCookie(CookieFactory.createCookie());
+        Cookie[] cookies = browser.manage().getCookies().toArray(new Cookie[0]);
+
+        browser.get(APP_SERVER_BASE_URL + CONTEXT_PATH + CHECK_COOKIES_SERVLET_PATH);
+        Utils.assertCookiesContain(cookies, new CookieServletCookieRetriever(browser.getPageSource()));
+
+        browser.get(APP_SERVER_BASE_URL + CONTEXT_PATH + CHECK_REQUEST_SERVLET_PATH);
+        Utils.assertCookiesContain(cookies, new RequestServletCookieRetriever(browser.getPageSource()));
     }
 
 }

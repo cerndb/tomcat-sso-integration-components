@@ -33,8 +33,8 @@ public final class Constants {
     public static final String GROUPS_ALLOWED = "groups.allowed";
     public static final String ORIGINAL_AI_USERNAME_COOKIE = "ORIGINAL_AI_USERNAME_COOKIE";
     public static final String ORIGINAL_AI_USER_COOKIE = "ORIGINAL_AI_USER_COOKIE";
-    public static final String ORIGINAL_AI_HRID_COOKIE = "ORGINAL_AI_HRID_COOKIE";
-    public static final String ORIGINAL_AI_LANG_COOKIE = "ORGINAL_AI_LANG_COOKIE";
+    public static final String ORIGINAL_AI_HRID_COOKIE = "ORIGINAL_AI_HRID_COOKIE";
+    public static final String ORIGINAL_AI_LANG_COOKIE = "ORIGINAL_AI_LANG_COOKIE";
     public static final String SECRET_COOKIE = "SECRET_COOKIE";
     public static final String[] GROUPS_FORBIDDEN_NONE = {"NONE"};
     public static final String[] GROUPS_ALLOWED_ALL = {"ALL"};
