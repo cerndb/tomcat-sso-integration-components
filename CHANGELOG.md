@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.15 (24-03-2020)
+- JEEDY-1829 - ORDS valve now reads the groups prefix from context parameter(`ords.role.prefixes`). If not defined, all groups are taken
+
+## 2.0.14 (24-03-2020)
+- JEEDY-1830 - Valve to get groups from JNDIRealm while using Keycloak - KeycloakAuthenticatorJNDIGroupsValve
+
 ## 2.0.13 (24-03-2020)
 - JEEDY-1690 AiCookiesValve apart from cookies directly, now overrides the headers as well
 - JEEDY-1705 AiSession apart from cookies directly, now overrides the headers as well
