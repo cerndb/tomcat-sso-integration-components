@@ -247,6 +247,20 @@ The [ERP](wos.cern.ch) expose some URLs with listings of documents. In the curre
 #### OrdsBasicAuthValve 
 
 With [Oracle REST Data Services](https://www.oracle.com/database/technologies/appdev/rest.html) (ORDS) running on Tomcat there exists a problem when authenticating through realms other than UserDatabaseRealm. This valve solves that issue for ORDS >= 18.1.1. For more information see [db-blog entry](http://db-blog.web.cern.ch/blog/jakub-granieczny/2019-12-oracle-rest-data-services-running-tomcat-basic-authentication-using).
+A parameter `ords.role.prefixes` has to be set, in similar manner as for SsoHeadersValve, e.g:
+
+```xml
+...
+    <Parameter name="sso.remote.headers" value="ords-rest-access-"/>
+...
+```
+Multiple values can be comma-separated:
+```xml
+...
+    <Parameter name="sso.remote.headers" value="ords-rest-access-,jeedy-"/>
+...
+```
+If no value is provided, the roles are not filtered.
 
 ### Java 7???
 

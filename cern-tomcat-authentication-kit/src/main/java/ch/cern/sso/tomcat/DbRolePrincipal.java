@@ -4,6 +4,10 @@ package ch.cern.sso.tomcat;
 import org.apache.catalina.Role;
 import org.apache.catalina.UserDatabase;
 
+/**
+ *
+ * @author jgraniec
+ */
 public class DbRolePrincipal implements Role {
     String desc, name;
     public DbRolePrincipal(String desc, String name){

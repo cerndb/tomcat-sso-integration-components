@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 /**
- *
+ * Removes selected headers from the request.
  * @author jgraniec
  */
 public class RequestHeaderGuardValve extends ValveBase {
