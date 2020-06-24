@@ -35,4 +35,14 @@ public class MessagesKeys {
     public static final String NO_SSO_REMOTE_HEADERS_CONFIGURED = "NO_SSO_REMOTE_HEADERS_CONFIGURED";
     public static final String NO_GUARDED_HEADERS_CONFIGURED = "NO_GUARDED_HEADERS_CONFIGURED";
     public static final String NO_ORDS_ROLE_PREFIXES_CONFIGURED = "NO_ORDS_ROLE_PREFIXES_CONFIGURED";
+    public static final String ROLE_PREFIXES_FOUND = "ROLE_PREFIXES_FOUND";
+    public static final String PRINCIPAL_INFO = "PRINCIPAL_INFO";
+    public static final String PRINCIPAL_ROLES = "PRINCIPAL_ROLES";
+    public static final String FILTERED_ROLES = "FILTERED_ROLES";
+    public static final String PRINCIPAL_NOT_INSTANCE_OF_USER = "PRINCIPAL_NOT_INSTANCE_OF_USER";
+    public static final String NEW_PRINCIPAL_CREATED = "NEW_PRINCIPAL_CREATED";
+    public static final String RETURNED_PRINCIPAL = "RETURNED_PRINCIPAL";
+    public static final String JNDI_REALM_ROLES_RETRIEVAL_ATTEMPT = "JNDI_REALM_ROLES_RETRIEVAL_ATTEMPT";
+    public static final String JNDI_REALM_ROLES_RETRIEVAL_SUCCESS = "JNDI_REALM_ROLES_RETRIEVAL_SUCCESS";
+    public static final String CURRENT_REALM = "CURRENT_REALM";
 }

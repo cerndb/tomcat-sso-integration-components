@@ -1,9 +1,12 @@
 # Changelog
 
-## 2.0.15 (24-03-2020)
+## 2.0.16 (19-06-2020)
+- JEEDY-1884 - Added more logging for `KeycloakAuthenticatorJNDIGroupsValve` and ORDS Valve
+
+## 2.0.15 (27-05-2020)
 - JEEDY-1829 - ORDS valve now reads the groups prefix from context parameter(`ords.role.prefixes`). If not defined, all groups are taken
 
-## 2.0.14 (24-03-2020)
+## 2.0.14 (20-05-2020)
 - JEEDY-1830 - Valve to get groups from JNDIRealm while using Keycloak - KeycloakAuthenticatorJNDIGroupsValve
 
 ## 2.0.13 (24-03-2020)

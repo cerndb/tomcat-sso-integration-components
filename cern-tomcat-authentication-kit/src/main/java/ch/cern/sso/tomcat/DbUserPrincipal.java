@@ -8,8 +8,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-//implementing the org.apache.catalina.User as a workaround for
-// ORDS oracle.dbtools.auth.container.catalina.CatalinaAuthenticator issues
+
+/**
+ * Implementing the org.apache.catalina.User as a workaround for
+ * ORDS oracle.dbtools.auth.container.catalina.CatalinaAuthenticator issues
+ * @author jgraniec
+ */
 public class DbUserPrincipal implements org.apache.catalina.User{
 
     private final List<Role> rolesList;
