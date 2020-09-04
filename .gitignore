@@ -7,3 +7,9 @@ test-suite/tomcat.8082/
 **/*.log
 .idea/
 **/*.iml
+.project
+.classpath
+.settings/
+profiles.xml
+.DS_Store
+.factorypath

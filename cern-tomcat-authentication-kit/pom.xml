@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Copyright 2020 CERN
+
+   This software is distributed under the terms of the GNU General Public
+   Licence version 3 (GPL Version 3), copied verbatim in the file "COPYING". In
+   applying this licence, CERN does not waive the privileges and immunities
+   granted to it by virtue of its status as an Intergovernmental Organization or
+   submit itself to any jurisdiction.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
