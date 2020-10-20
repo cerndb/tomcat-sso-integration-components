@@ -51,4 +51,5 @@ public class MessagesKeys {
     public static final String JNDI_REALM_ROLES_RETRIEVAL_ATTEMPT = "JNDI_REALM_ROLES_RETRIEVAL_ATTEMPT";
     public static final String JNDI_REALM_ROLES_RETRIEVAL_SUCCESS = "JNDI_REALM_ROLES_RETRIEVAL_SUCCESS";
     public static final String CURRENT_REALM = "CURRENT_REALM";
+    public static final String NO_IS_ENABLED_OVERRIDE_JNDI_ROLES="NO_IS_ENABLED_OVERRIDE_JNDI_ROLES";
 }
