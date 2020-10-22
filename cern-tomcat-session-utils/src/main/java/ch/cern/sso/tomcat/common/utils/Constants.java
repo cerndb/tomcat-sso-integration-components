@@ -56,4 +56,5 @@ public final class Constants {
     public static final String MOCK_ROLES = "mock.roles";
     public static final String GUARDED_HEADERS = "guarded.headers";
     public static final String ORDS_ROLE_PREFIXES = "ords.role.prefixes";
+    public static final String IS_ENABLED_OVERRIDE_JNDI_ROLES = "is.enabled.override.jndi.roles";
 }
